@@ -129,5 +129,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# webstorm
+.idea
+
 # server config
 server-config.json
