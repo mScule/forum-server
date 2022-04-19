@@ -2,13 +2,18 @@
 
 const
     express = require("express"),
-    { config } = require("./utils/config");
+    {config} = require("./utils/config");
 
 const
-    { login } = require("./api/login"),
+    {login} = require("./api/login"),
     comments = require("./api/comments"),
     posts = require("./api/posts"),
     users = require("./api/users");
+
+// const cors = require('cors');
+// app.use(cors({
+//     origin: '/login'
+// }));
 
 (async () => {
     const app = express();
