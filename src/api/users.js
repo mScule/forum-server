@@ -1,20 +1,20 @@
 "use strict";
 
-const query = require("../utils/db");
+const db = require("../utils/db");
 
 module.exports = {
-    post: (req, res) => {
-        // req.body.name;
-        // req.body.email;
-        // req.body.password;
-        // req.body.disabled;
+    post: async (req, res) => {
+        const statement = "INSERT INTO `forum_db`.`users` (`name`, `email`, `password`, `disabled`) VALUES (?, ?, ?, ?);";
+        const values = [req.body.name, req.body.email, req.body.password, req.body.disabled];
+        const result = await db.query(statement, values);
 
-        const statement = "INSERT INTO `forum_db`.`users` (`name`, `email`, `password`, `disabled`) VALUES (?, ?, ?, ?);"
-        const values = ['1', '1', '1', 0];
-
-        query.query(statement, values);
-
-        res.send("Users post");
+        if(result.affectedRows > 0){
+            res.status(201);
+            res.send("User added to database!");
+        }else{
+            res.status(304);
+            res.send("Error adding user to database!");
+        }
     },
     put: (req, res) => {
         res.send("Users put");

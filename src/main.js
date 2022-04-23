@@ -10,6 +10,9 @@ const
     posts = require("./api/posts"),
     users = require("./api/users");
 
+
+const bodyParser = require('body-parser');
+
 // const cors = require('cors');
 // app.use(cors({
 //     origin: '/login'
@@ -17,6 +20,8 @@ const
 
 (async () => {
     const app = express();
+    app.use(bodyParser.urlencoded({extended: false}));
+    app.use(bodyParser.json())
 
     // Login
     app.post("/login", (req, res) => login(req, res));
