@@ -2,6 +2,8 @@
 
 const
     express = require("express"),
+    cors = require("cors"),
+    bodyParser = require('body-parser'),
     {config} = require("./utils/config");
 
 const
@@ -10,16 +12,11 @@ const
     posts = require("./api/posts"),
     users = require("./api/users");
 
-
-const bodyParser = require('body-parser');
-
-// const cors = require('cors');
-// app.use(cors({
-//     origin: '/login'
-// }));
-
 (async () => {
     const app = express();
+    app.use(cors({
+        origin: "http://localhost:8081"
+    }));
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json())
 
