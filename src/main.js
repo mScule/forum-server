@@ -25,12 +25,13 @@ const
         // set a cookie
         function (req, res, next) {
             // check if client sent cookie
-            var cookie = req.cookies.loginCookie;
+            const cookie = req.cookies.loginCookie;
             if (cookie === undefined) {
                 // no: send to login page
+                console.log("Go to login page.")
             } else {
                 // yes, cookie was already present
-                console.log('cookie exists', cookie);
+                console.log('cookie already exists', cookie);
             }
             next();
         });
