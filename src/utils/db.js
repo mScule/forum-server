@@ -12,24 +12,14 @@ const connectionPool = mysql.createPool({
 });
 
 module.exports = {
-    query: (query, values) => {
+    query: (statement, values) => {
         return new Promise((resolve, reject) => {
-            connectionPool.query(query, values, (errors, results) => {
+            connectionPool.query(statement, values, (errors, results) => {
                 if(errors)
                     return reject(errors);
                 else
                     return resolve(results);
             })
         })
-    },
-    prepare: (values) => {
-        return new Promise((resolve, reject) => {
-            connectionPool.prepare( values, (errors, results) => {
-                if(errors)
-                    return reject(errors);
-                else
-                    return resolve(results);
-            })
-        })
-    },
+    }
 };
