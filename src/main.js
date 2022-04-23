@@ -4,6 +4,7 @@ const
     express = require("express"),
     cors = require("cors"),
     bodyParser = require('body-parser'),
+    cookieParser = require('cookie-parser'),
     {config} = require("./utils/config");
 
 const
@@ -14,11 +15,25 @@ const
 
 (async () => {
     const app = express();
+
     app.use(cors({
-        origin: "http://localhost:8081"
-    }));
-    app.use(bodyParser.urlencoded({extended: false}));
-    app.use(bodyParser.json())
+            origin: "http://localhost:8081"
+        }),
+        bodyParser.urlencoded({extended: false}),
+        bodyParser.json(),
+        cookieParser(),
+        // set a cookie
+        function (req, res, next) {
+            // check if client sent cookie
+            var cookie = req.cookies.loginCookie;
+            if (cookie === undefined) {
+                // no: send to login page
+            } else {
+                // yes, cookie was already present
+                console.log('cookie exists', cookie);
+            }
+            next();
+        });
 
     // Login
     app.post("/login", (req, res) => login(req, res));
