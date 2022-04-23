@@ -6,14 +6,18 @@ module.exports = {
     post: async (req, res) => {
         const statement = "INSERT INTO `forum_db`.`users` (`name`, `email`, `password`, `disabled`) VALUES (?, ?, ?, ?);";
         const values = [req.body.name, req.body.email, req.body.password, req.body.disabled];
-        const result = await db.query(statement, values);
+        let result;
+        try {
+            result = await db.query(statement, values);
+        } catch (e) {
+            console.error(e.toString())
+        }
 
-        if(result.affectedRows > 0){
+        if (result === undefined) {
+            res.send("Error adding user to database!");
+        } else {
             res.status(201);
             res.send("User added to database!");
-        }else{
-            res.status(304);
-            res.send("Error adding user to database!");
         }
     },
     put: (req, res) => {

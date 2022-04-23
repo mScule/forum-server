@@ -26,6 +26,8 @@ CREATE TABLE IF NOT EXISTS `publications` (
   `content` text NOT NULL,
   `private` bit(1) NOT NULL,
   PRIMARY KEY (`publication_id`),
+  UNIQUE KEY `title` (`title`),
+  UNIQUE KEY `content` (`content`) USING HASH,
   KEY `fk_publications_users` (`user_id`),
   CONSTRAINT `fk_publications_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
@@ -40,8 +42,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` char(255) NOT NULL,
   `image` mediumblob DEFAULT NULL,
   `disabled` bit(1) NOT NULL,
-  PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `session_key` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `password` (`password`),
+  UNIQUE KEY `session_key` (`session_key`)
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
