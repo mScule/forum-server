@@ -22,4 +22,14 @@ module.exports = {
             })
         })
     },
+    prepare: (values) => {
+        return new Promise((resolve, reject) => {
+            connectionPool.prepare( values, (errors, results) => {
+                if(errors)
+                    return reject(errors);
+                else
+                    return resolve(results);
+            })
+        })
+    },
 };
