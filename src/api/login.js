@@ -1,13 +1,34 @@
 "use strict";
 
-module.exports = {
-    login: (req, res) => {
-        // set a new cookie on login
-        let randomNumber=Math.random().toString();
-        randomNumber=randomNumber.substring(2,randomNumber.length);
-        res.cookie('loginCookie',randomNumber, { maxAge: 900000, httpOnly: true });
-        console.log('cookie created successfully');
+const db = require("../utils/db");
 
-        res.send("Login");
+module.exports = {
+    login: async (req, res) => {
+        // set a new cookie on login
+        let randomNumber = Math.random().toString();
+        randomNumber = randomNumber.substring(2, randomNumber.length);
+
+        const statement = "UPDATE `forum_db`.`users` SET `session_key`=" + randomNumber + " WHERE `name`=? AND `password`=?";
+        console.log(req.body.name + " " + req.body.password)
+        const values = [req.body.name, req.body.password];
+
+        let result;
+        try {
+            result = await db.query(statement, values);
+            console.log(result);
+        } catch (e) {
+            console.error(e.toString());
+        }
+
+        if (result === undefined) {
+            res.send("Error logging in!");
+        } else {
+            res.status(201);
+
+            res.cookie('loginCookie', randomNumber, {maxAge: 900000, httpOnly: true});
+            console.log('cookie created successfully');
+
+            res.send("Login");
+        }
     }
 }

@@ -37,7 +37,7 @@ const
         });
 
     // Login
-    app.post("/login", (req, res) => login(req, res));
+    app.put("/login", (req, res) => login(req, res));
 
     // User
     app.post("/users", (req, res) => users.post(req, res));
