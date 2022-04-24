@@ -6,19 +6,8 @@ module.exports = {
     post: async (req, res) => {
         const statement = "INSERT INTO `forum_db`.`users` (`name`, `email`, `password`, `disabled`) VALUES (?, ?, ?, ?);";
         const values = [req.body.name, req.body.email, req.body.password, req.body.disabled];
-        let result;
-        try {
-            result = await db.query(statement, values);
-        } catch (e) {
-            console.error(e.toString())
-        }
-
-        if (result === undefined) {
-            res.send("Error adding user to database!");
-        } else {
-            res.status(201);
-            res.send("User added to database!");
-        }
+        const result = await db.query(statement, values);
+        res.send(result);
     },
     put: (req, res) => {
         res.send("Users put");
@@ -32,13 +21,14 @@ module.exports = {
     getCurrentUser: async (req) => {
         const statement = "SELECT user_id FROM users WHERE session_key =?";
         const values = [req.cookies.loginCookie];
-
-        let result;
-        try {
-            result = await db.query(statement, values);
+        console.log("req.cookies.loginCookie: " + req.cookies.loginCookie)
+        const result = await db.query(statement, values);
+        console.log("result: " + result)
+        if (result !== "No result") {
+            console.log("TEST");
             return result[0].user_id;
-        } catch (e) {
-            console.error(e.toString());
+        } else {
+            throw result;
         }
     }
 }

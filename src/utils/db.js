@@ -2,7 +2,7 @@
 
 const
     mysql = require("mysql"),
-    { config } = require("./config");
+    {config} = require("./config");
 
 const connectionPool = mysql.createPool({
     host: config.mysql.host,
@@ -12,10 +12,10 @@ const connectionPool = mysql.createPool({
 });
 
 
-function handleQuery (statement, values) {
+function handleQuery(statement, values) {
     return new Promise((resolve, reject) => {
         connectionPool.query(statement, values, (errors, results) => {
-            if(errors)
+            if (errors)
                 return reject(errors);
             else
                 return resolve(results);
@@ -26,11 +26,17 @@ function handleQuery (statement, values) {
 module.exports = {
     query: async (statement, values) => {
         try {
-            const promise = await handleQuery(statement, values);
-            return promise;
+            const resolve = await handleQuery(statement, values);
+            console.log(resolve.length)
+            console.log(resolve.affectedRows)
+            if (resolve.length === 0 || resolve.affectedRows === 0) {
+                console.log("No result")
+                return "No result";
+            }
+            return resolve;
         } catch (e) {
             console.error(e.toString())
-            return e.toString();
+            return e;
         }
     }
 };

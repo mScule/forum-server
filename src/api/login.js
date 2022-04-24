@@ -8,18 +8,10 @@ module.exports = {
         randomNumber = randomNumber.substring(2, randomNumber.length);
 
         const statement = "UPDATE `forum_db`.`users` SET `session_key`=" + randomNumber + " WHERE `name`=? AND `password`=?";
-        console.log(req.body.name + " " + req.body.password)
         const values = [req.body.name, req.body.password];
+        const result = await db.query(statement, values);
 
-        let result;
-        try {
-            result = await db.query(statement, values);
-            console.log(result);
-        } catch (e) {
-            console.error(e.toString());
-        }
-
-        if (result === undefined) {
+        if (result === undefined || result === "No rows modified") {
             res.send("Error logging in!");
         } else {
             res.status(201);
