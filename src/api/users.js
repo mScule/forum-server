@@ -29,4 +29,16 @@ module.exports = {
     get: (req, res) => {
         res.send("Users get");
     },
+    getCurrentUser: async (req) => {
+        const statement = "SELECT user_id FROM users WHERE session_key =?";
+        const values = [req.cookies.loginCookie];
+
+        let result;
+        try {
+            result = await db.query(statement, values);
+            return result[0].user_id;
+        } catch (e) {
+            console.error(e.toString());
+        }
+    }
 }

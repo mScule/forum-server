@@ -22,7 +22,6 @@ const
         bodyParser.urlencoded({extended: false}),
         bodyParser.json(),
         cookieParser(),
-        // set a cookie
         function (req, res, next) {
             // check if client sent cookie
             const cookie = req.cookies.loginCookie;

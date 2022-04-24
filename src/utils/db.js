@@ -11,15 +11,26 @@ const connectionPool = mysql.createPool({
     database: config.mysql.database
 });
 
-module.exports = {
-    query: (statement, values) => {
-        return new Promise((resolve, reject) => {
-            connectionPool.query(statement, values, (errors, results) => {
-                if(errors)
-                    return reject(errors);
-                else
-                    return resolve(results);
-            })
+
+function handleQuery (statement, values) {
+    return new Promise((resolve, reject) => {
+        connectionPool.query(statement, values, (errors, results) => {
+            if(errors)
+                return reject(errors);
+            else
+                return resolve(results);
         })
+    })
+}
+
+module.exports = {
+    query: async (statement, values) => {
+        try {
+            const promise = await handleQuery(statement, values);
+            return promise;
+        } catch (e) {
+            console.error(e.toString())
+            return e.toString();
+        }
     }
 };

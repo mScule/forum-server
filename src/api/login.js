@@ -4,7 +4,6 @@ const db = require("../utils/db");
 
 module.exports = {
     login: async (req, res) => {
-        // set a new cookie on login
         let randomNumber = Math.random().toString();
         randomNumber = randomNumber.substring(2, randomNumber.length);
 
@@ -25,6 +24,7 @@ module.exports = {
         } else {
             res.status(201);
 
+            // set a new cookie on login
             res.cookie('loginCookie', randomNumber, {maxAge: 900000, httpOnly: true});
             console.log('cookie created successfully');
 
