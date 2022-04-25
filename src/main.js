@@ -25,7 +25,7 @@ const
         cookieParser(),
         function (req, res, next) {
             // check if client sent cookie
-            const cookie = req.cookies.forum_api_key;
+            let cookie = req.cookies.forum_api_key;
             if (cookie === undefined) {
                 // no: send to login page
                 console.log("Go to login page.")
@@ -40,7 +40,7 @@ const
     app.put("/login", (req, res) => login(req, res));
 
     // Login
-    app.put("/logout", (req, res) => login(req, res));
+    app.put("/logout", (req, res) => logout(req, res));
 
     // User
     app.post("/users", (req, res) => users.post(req, res));

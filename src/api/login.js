@@ -11,7 +11,7 @@ module.exports = {
         const values = [req.body.name, req.body.password];
         const result = await db.query(statement, values);
 
-        if (result === undefined || result === "No rows modified") {
+        if (result === undefined || result === "No result") {
             res.send("Error logging in!");
         } else {
             res.status(201);

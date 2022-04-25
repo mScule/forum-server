@@ -27,8 +27,8 @@ module.exports = {
     query: async (statement, values) => {
         try {
             const resolve = await handleQuery(statement, values);
-            console.log(resolve.length)
-            console.log(resolve.affectedRows)
+            console.log("resolve.length: " + resolve.length)
+            console.log("resolve.affectedRows: " + resolve.affectedRows)
             if (resolve.length === 0 || resolve.affectedRows === 0) {
                 console.log("No result")
                 return "No result";
