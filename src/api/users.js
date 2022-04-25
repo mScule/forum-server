@@ -1,7 +1,6 @@
 "use strict";
 
 const db = require("../utils/db");
-const {stringify} = require("nodemon/lib/utils");
 
 module.exports = {
     post: async (req, res) => {
