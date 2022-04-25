@@ -11,7 +11,6 @@ const
     {login} = require("./api/login"),
     {logout} = require("./api/logout"),
     publications = require("./api/publications"),
-    // posts = require("./api/posts"),
     users = require("./api/users");
 
 (async () => {
@@ -53,12 +52,6 @@ const
     app.put("/publications", (req, res) => publications.put(req, res));
     app.delete("/publications", (req, res) => publications.delete(req, res));
     app.get("/publications", (req, res) => publications.get(req, res));
-
-    // // Posts
-    // app.post("/posts", (req, res) => posts.post(req, res));
-    // app.put("/posts", (req, res) => posts.put(req, res));
-    // app.delete("/posts", (req, res) => posts.delete(req, res));
-    // app.get("/posts", (req, res) => posts.get(req, res));
 
     const server = app.listen(config.server.port, () => {
         const
