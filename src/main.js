@@ -17,23 +17,23 @@ const
     const app = express();
 
     app.use(cors({
-            origin: "http://localhost:8081"
-        }),
-        bodyParser.urlencoded({extended: false}),
-        bodyParser.json(),
-        cookieParser(),
-        function (req, res, next) {
-            // check if client sent cookie
-            let cookie = req.cookies.forum_api_key;
-            if (cookie === undefined) {
-                // no: send to login page
-                console.log("Go to login page.")
-            } else {
-                // yes, cookie was already present
-                console.log('cookie already exists', cookie);
-            }
-            next();
-        });
+        origin: "http://localhost:8081"
+    }),
+    bodyParser.urlencoded({extended: false}),
+    bodyParser.json(),
+    cookieParser(),
+    function (req, res, next) {
+        // check if client sent cookie
+        let cookie = req.cookies.forum_api_key;
+        if (cookie === undefined) {
+            // no: send to login page
+            console.log("Go to login page.")
+        } else {
+            // yes, cookie was already present
+            console.log('cookie already exists', cookie);
+        }
+        next();
+    });
 
     // Login
     app.put("/login", (req, res) => login(req, res));
