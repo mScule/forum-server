@@ -19,9 +19,9 @@ module.exports = {
         res.send("Users get");
     },
     getCurrentUser: async (req) => {
-        const statement = "SELECT user_id FROM users WHERE session_key =?";
-        const values = [req.cookies.loginCookie];
-        console.log("req.cookies.loginCookie: " + req.cookies.loginCookie)
+        const statement = "SELECT user_id FROM users WHERE forum_api_key =?";
+        const values = [req.cookies.forum_api_key];
+        console.log("req.cookies.forum_api_key: " + req.cookies.forum_api_key)
         const result = await db.query(statement, values);
         console.log("result: " + result)
         if (result !== "No result") {

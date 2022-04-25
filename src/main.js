@@ -9,6 +9,7 @@ const
 
 const
     {login} = require("./api/login"),
+    {logout} = require("./api/logout"),
     comments = require("./api/comments"),
     posts = require("./api/posts"),
     users = require("./api/users");
@@ -24,7 +25,7 @@ const
         cookieParser(),
         function (req, res, next) {
             // check if client sent cookie
-            const cookie = req.cookies.loginCookie;
+            const cookie = req.cookies.forum_api_key;
             if (cookie === undefined) {
                 // no: send to login page
                 console.log("Go to login page.")
@@ -37,6 +38,9 @@ const
 
     // Login
     app.put("/login", (req, res) => login(req, res));
+
+    // Login
+    app.put("/logout", (req, res) => login(req, res));
 
     // User
     app.post("/users", (req, res) => users.post(req, res));
