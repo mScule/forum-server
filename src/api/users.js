@@ -1,6 +1,7 @@
 "use strict";
 
 const db = require("../utils/db");
+const {stringify} = require("nodemon/lib/utils");
 
 module.exports = {
     post: async (req, res) => {
@@ -9,8 +10,12 @@ module.exports = {
         const result = await db.query(statement, values);
         res.send(result);
     },
-    put: (req, res) => {
-        res.send("Users put");
+    put: async (req, res) => {
+        const statement = `UPDATE forum_db.users SET email=?, password=?, image=?, disabled=? WHERE email=? AND password=? AND forum_api_key=?`;
+        const values = [req.body.email_new, req.body.password_new, req.body.image, req.body.disabled, req.body.email_current, req.body.password_current, req.body.forum_api_key];
+        const result = await db.query(statement, values);
+
+        res.send("Users put: " + JSON.stringify(result));
     },
     delete: async (req, res) => {
         const statement = "DELETE FROM users WHERE user_id=?";
