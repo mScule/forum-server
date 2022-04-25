@@ -25,8 +25,12 @@ module.exports = {
 
         res.send("Publication put: " + result);
     },
-    delete: (req, res) => {
-        res.send("Publication delete");
+    delete: async (req, res) => {
+        const statement = "DELETE FROM publications WHERE publication_id=?";
+        const values = [req.body.publication_id];
+        const result = await db.query(statement, values);
+
+        res.send("Publication delete: " + result);
     },
     get: async (req, res) => {
         // Get publication rows with certain column values or leave the column values blank to not take their values into account in the query.
