@@ -33,10 +33,12 @@ module.exports = {
         res.send("Publication delete: " + result);
     },
     get: async (req, res) => {
-        console.log("req.body.private: " + req.body.private)
+        let statementLine = "";
 
         if(req.body.private === ""){
-            console.log("TEST")
+            statementLine = " IS NULL OR private IS NOT NULL"
+        } else {
+            statementLine = "= ?";
         }
 
         // Get publication rows with certain column values or leave the column values blank to not take their values into account in the query.
@@ -45,7 +47,7 @@ module.exports = {
             AND type = IF (? = '', type, ?)
             AND title = IF (? = '', title, ?)
             AND content = IF (? = '', content, ?)
-            AND private = IF (? = '', private, ?)`;
+            AND private` + statementLine;
         const values = [req.body.publication_id, req.body.publication_id, req.body.user_id, req.body.user_id, req.body.type, req.body.type,
             req.body.title, req.body.title, req.body.content, req.body.content, req.body.private, req.body.private];
         const result = await db.query(statement, values);
