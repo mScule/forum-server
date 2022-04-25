@@ -52,6 +52,6 @@ module.exports = {
             req.body.title, req.body.title, req.body.content, req.body.content, req.body.private, req.body.private];
         const result = await db.query(statement, values);
 
-        res.send("Publication get: " + JSON.stringify(result));
+        res.send(result);
     },
 }

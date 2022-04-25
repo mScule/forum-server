@@ -43,7 +43,7 @@ module.exports = {
             req.body.disabled, req.body.disabled, req.body.forum_api_key, req.body.forum_api_key];
         const result = await db.query(statement, values);
 
-        res.send("Users get: " + JSON.stringify(result));
+        res.send(result);
     },
     getCurrentUser: async (req) => {
         const statement = "SELECT user_id FROM users WHERE forum_api_key =?";
