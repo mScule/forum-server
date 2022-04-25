@@ -13,16 +13,20 @@ module.exports = {
             const values = [currentUser, req.body.type, req.body.title, req.body.content, 0];
             const result = await db.query(statement, values);
 
-            res.send("Comment post result: " + result);
+            res.send("Publication post result: " + result);
         } catch (e) {
-            res.send("Comment post result: " + e);
+            res.send("Publication post result: " + e);
         }
     },
-    put: (req, res) => {
-        res.send("Comment put");
+    put: async (req, res) => {
+        const statement = "UPDATE `forum_db`.`publications` SET `private`=? WHERE `publication_id`=?";
+        const values = [req.body.private, req.body.publication_id];
+        const result = await db.query(statement, values);
+
+        res.send("Publication put: " + result);
     },
     delete: (req, res) => {
-        res.send("Comment delete");
+        res.send("Publication delete");
     },
     get: async (req, res) => {
         // Get publication rows with certain column values or leave the column values blank to not take their values into account in the query.

@@ -50,8 +50,8 @@ const
 
     // Publications
     app.post("/publications", (req, res) => publications.post(req, res));
-    app.put("/publications", (req, res) => publications.delete(req, res));
-    app.delete("/publications", (req, res) => publications.put(req, res));
+    app.put("/publications", (req, res) => publications.put(req, res));
+    app.delete("/publications", (req, res) => publications.delete(req, res));
     app.get("/publications", (req, res) => publications.get(req, res));
 
     // // Posts
