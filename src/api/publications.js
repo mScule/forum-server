@@ -33,6 +33,12 @@ module.exports = {
         res.send("Publication delete: " + result);
     },
     get: async (req, res) => {
+        console.log("req.body.private: " + req.body.private)
+
+        if(req.body.private === ""){
+            console.log("TEST")
+        }
+
         // Get publication rows with certain column values or leave the column values blank to not take their values into account in the query.
         const statement = `SELECT * FROM publications WHERE publication_id = IF (? = '', publication_id, ?) 
             AND user_id = IF (? = '', user_id, ?) 
