@@ -3,7 +3,12 @@
 const db = require("../utils/db");
 
 module.exports = {
+    /*
+    * Logs the user in, creates a cookie to identify the user and adds if the given username and password match a user stored in the database.
+    * Insert the username as "name" and password as "password" in the HTTP request's body in JSON format.
+    * */
     login: async (req, res) => {
+        res.status(202);
         let randomNumber = Math.random().toString();
         randomNumber = randomNumber.substring(2, randomNumber.length);
 
@@ -12,15 +17,15 @@ module.exports = {
         const result = await db.query(statement, values);
 
         if (result === undefined || result === "No result") {
+            res.status(401);
             res.send("Error logging in!");
         } else {
-            res.status(201);
-
             // set a new cookie on login
             res.cookie('forum_api_key', randomNumber, {maxAge: 900000, httpOnly: true});
             console.log('cookie created successfully');
 
-            res.send("Login");
+            res.status(201);
+            res.send("Login successful");
         }
     }
 }

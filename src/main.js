@@ -26,11 +26,10 @@ const
         // check if client sent cookie
         let cookie = req.cookies.forum_api_key;
         if (cookie === undefined) {
-            // no: send to login page
-            console.log("Go to login page.")
+            console.log("Not logged in")
         } else {
             // yes, cookie was already present
-            console.log('cookie already exists', cookie);
+            console.log('Cookie already exists: ', cookie);
         }
         next();
     });

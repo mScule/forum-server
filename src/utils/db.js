@@ -11,7 +11,6 @@ const connectionPool = mysql.createPool({
     database: config.mysql.database
 });
 
-
 function handleQuery(statement, values) {
     return new Promise((resolve, reject) => {
         connectionPool.query(statement, values, (errors, results) => {
@@ -29,8 +28,12 @@ module.exports = {
             const resolve = await handleQuery(statement, values);
             console.log("resolve.length: " + resolve.length)
             console.log("resolve.affectedRows: " + resolve.affectedRows)
-            if (resolve.length === 0 || resolve.affectedRows === 0) {
+            if (resolve.length === 0) {
                 console.log("No result")
+                return "No result";
+            } else if (resolve.affectedRows === 0) {
+                console.log("No result")
+                // TODO: change return to "No affected rows". Also add a separate return for no rows created.
                 return "No result";
             }
             return resolve;
