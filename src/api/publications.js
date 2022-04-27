@@ -10,16 +10,14 @@ module.exports = {
     * Insert the to be added publication's type as "type", title as "title" and content as "content" in the HTTP request's body in JSON format.
     * */
     post: async (req, res) => {
-        res.status(202);
         try {
-            const currentUser = await users.getCurrentUser(req);
+            const currentUser = await users.getCurrentUser(req, res);
             console.log("currentUser: " + currentUser);
 
             const statement = "INSERT INTO `forum_db`.`publications` (`user_id`, `type`, `title`, `content`, `private`) VALUES (?, ?, ?, ?, ?)";
             const values = [currentUser, req.body.type, req.body.title, req.body.content, 0];
-            const result = await db.query(statement, values);
+            const result = await db.query(statement, values, req);
 
-            res.status(201);
             res.send("Publication post result: " + result);
         } catch (e) {
             res.status(401);
@@ -30,29 +28,24 @@ module.exports = {
     * Sets a publication private.
     * */
     put: async (req, res) => {
-        res.status(202);
         const statement = "UPDATE `forum_db`.`publications` SET `private`=? WHERE `publication_id`=?";
         const values = [req.body.private, req.body.publication_id];
-        const result = await db.query(statement, values);
-        res.status(200);
+        const result = await db.query(statement, values, res);
         res.send("Publication put: " + result);
     },
     /*
     * Deletes a publication.
     * */
     delete: async (req, res) => {
-        res.status(202);
         const statement = "DELETE FROM publications WHERE publication_id=?";
         const values = [req.body.publication_id];
-        const result = await db.query(statement, values);
-        res.status(200);
+        const result = await db.query(statement, values, res);
         res.send("Publication delete: " + result);
     },
     /*
-    * Get publications
+    * Gets publications
     * */
     get: async (req, res) => {
-        res.status(202);
         let statementLine = "";
 
         if (req.body.private === "") {
@@ -60,7 +53,6 @@ module.exports = {
         } else {
             statementLine = "= ?";
         }
-
         // Get publication rows with certain column values or leave the column values blank to not take their values into account in the query.
         const statement = `SELECT * FROM publications WHERE publication_id = IF (? = '', publication_id, ?) 
             AND user_id = IF (? = '', user_id, ?) 
@@ -70,9 +62,8 @@ module.exports = {
             AND private` + statementLine;
         const values = [req.body.publication_id, req.body.publication_id, req.body.user_id, req.body.user_id, req.body.type, req.body.type,
             req.body.title, req.body.title, req.body.content, req.body.content, req.body.private, req.body.private];
-        const result = await db.query(statement, values);
+        const result = await db.query(statement, values, res);
 
-        res.status(200);
         res.send(result);
     },
 }

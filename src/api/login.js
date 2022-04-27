@@ -8,13 +8,12 @@ module.exports = {
     * Insert the username as "name" and password as "password" in the HTTP request's body in JSON format.
     * */
     login: async (req, res) => {
-        res.status(202);
         let randomNumber = Math.random().toString();
         randomNumber = randomNumber.substring(2, randomNumber.length);
 
         const statement = "UPDATE `forum_db`.`users` SET `forum_api_key`=" + randomNumber + " WHERE `name`=? AND `password`=?";
         const values = [req.body.name, req.body.password];
-        const result = await db.query(statement, values);
+        const result = await db.query(statement, values, res);
 
         if (result === undefined || result === "No result") {
             res.status(401);

@@ -23,22 +23,30 @@ function handleQuery(statement, values) {
 }
 
 module.exports = {
-    query: async (statement, values) => {
+    query: async (statement, values, res) => {
+        res.status(202);
         try {
-            const resolve = await handleQuery(statement, values);
-            console.log("resolve.length: " + resolve.length)
-            console.log("resolve.affectedRows: " + resolve.affectedRows)
+            let resolve = await handleQuery(statement, values);
+            console.log("resolve: " + JSON.stringify(resolve));
+            console.log("resolve.length: " + resolve.length);
+            console.log("resolve.affectedRows: " + resolve.affectedRows);
             if (resolve.length === 0) {
-                console.log("No result")
-                return "No result";
+                console.log("No result");
+                resolve = "No result";
+                res.status(404);
             } else if (resolve.affectedRows === 0) {
-                console.log("No result")
-                // TODO: change return to "No affected rows". Also add a separate return for no rows created.
-                return "No result";
+                console.log("No affected rows");
+                resolve = "No result";
+            } else if (resolve.affectedRows > 0 && resolve.changedRows === 0) {
+                // row created
+                res.status(201);
+            } else if (resolve.affectedRows > 0 && resolve.changedRows > 0) {
+                // row updated
+                res.status(200);
             }
             return resolve;
         } catch (e) {
-            console.error(e.toString())
+            console.error(e.toString());
             return e;
         }
     }
