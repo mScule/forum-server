@@ -28,8 +28,9 @@ module.exports = {
     * Sets a publication private.
     * */
     put: async (req, res) => {
-        const statement = "UPDATE `forum_db`.`publications` SET `private`=? WHERE `publication_id`=?";
-        const values = [req.body.private, req.body.publication_id];
+        const currentUser = await users.getCurrentUser(req, res);
+        const statement = "UPDATE forum_db.publications SET private=? WHERE publication_id=? AND user_id=?";
+        const values = [req.body.private, req.body.publication_id, currentUser];
         const result = await db.query(statement, values, res);
         res.send("Publication put: " + result);
     },
@@ -48,20 +49,20 @@ module.exports = {
     get: async (req, res) => {
         let statementLine = "";
 
-        if (req.body.private === "") {
-            statementLine = " IS NULL OR private IS NOT NULL"
+        if (req.body.private === "any") {
+            statementLine = " (private IS NULL OR private IS NOT NULL)"
         } else {
-            statementLine = "= ?";
+            statementLine = "private = ?";
         }
-        // Get publication rows with certain column values or leave the column values blank to not take their values into account in the query.
-        const statement = `SELECT * FROM publications WHERE publication_id = IF (? = '', publication_id, ?) 
-            AND user_id = IF (? = '', user_id, ?) 
-            AND type = IF (? = '', type, ?)
-            AND title = IF (? = '', title, ?)
-            AND content = IF (? = '', content, ?)
-            AND private` + statementLine;
+        // Get publication rows with certain column values or don't take the column values into account if the request for them is "any".
+        const statement = `SELECT * FROM publications WHERE publication_id = IF (? = "any", publication_id, ?) 
+            AND user_id = IF (? = "any", user_id, ?) 
+            AND type = IF (? = "any", type, ?)
+            AND title = IF (? = "any", title, ?)
+            AND content = IF (? = "any", content, ?)
+            AND ` + statementLine;
         const values = [req.body.publication_id, req.body.publication_id, req.body.user_id, req.body.user_id, req.body.type, req.body.type,
-            req.body.title, req.body.title, req.body.content, req.body.content, req.body.private, req.body.private];
+            req.body.title, req.body.title, req.body.content, req.body.content, req.body.private];
         const result = await db.query(statement, values, res);
 
         res.send(result);

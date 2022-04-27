@@ -18,21 +18,30 @@ module.exports = {
     },
 
     delete: async (req, res) => {
-        const statement = "DELETE FROM users WHERE user_id=?";
-        const values = [req.body.user_id];
+        const statement = "DELETE FROM users WHERE WHERE email=? AND password=? AND forum_api_key=?";
+        const values = [req.body.email, req.body.password, req.cookies.forum_api_key];
         const result = await db.query(statement, values, res);
         res.send("Users delete: " + result);
     },
 
     get: async (req, res) => {
-        // Get user rows with certain column values or leave the column values blank to not take their values into account in the query.
-        const statement = `SELECT * FROM users WHERE user_id = IF (? = '', user_id, ?)
-            AND name = IF (? = '', name, ?)
-            AND email = IF (? = '', email, ?)
-            AND disabled = IF (? = '', disabled, ?)`;
+        console.log("req.body.disabled: " + req.body.disabled)
+        let statementLine = "disabled = disabled"
 
-        const values = [req.body.user_id, req.body.user_id, req.body.name, req.body.name, req.body.email, req.body.email,
-            req.body.disabled, req.body.disabled];
+        if (req.body.disabled === 1 || req.body.disabled === "1") {
+            statementLine = "disabled = 1"
+        } else if (req.body.disabled === 0 || req.body.disabled === "0") {
+            statementLine = "disabled = 0"
+        }
+
+        // Get user rows with certain column values or don't take the column values into account if the request for them is "any".
+        const statement = `SELECT user_id, name, email, image, disabled FROM users WHERE user_id = IF (? = "any", user_id, ?)
+            AND name = IF (? = "any", name, ?)
+            AND email = IF (? = "any", email, ?)
+            AND password = password
+            AND ` + statementLine;
+
+        const values = [req.body.user_id, req.body.user_id, req.body.name, req.body.name, req.body.email, req.body.email, req.body.disabled, req.body.disabled];
         const result = await db.query(statement, values, res);
 
         res.send(result);
