@@ -16,12 +16,12 @@ module.exports = {
 
             const statement = "INSERT INTO `forum_db`.`publications` (`user_id`, `type`, `title`, `content`, `private`) VALUES (?, ?, ?, ?, ?)";
             const values = [currentUser, req.body.type, req.body.title, req.body.content, 0];
-            const result = await db.query(statement, values, req);
+            const result = await db.query(statement, values, res);
 
             res.send("Publication post result: " + result);
         } catch (e) {
             res.status(401);
-            res.send("Publication post result: " + e);
+            res.send("Publication error: " + e);
         }
     },
     /*
