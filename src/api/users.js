@@ -25,22 +25,14 @@ module.exports = {
     },
 
     get: async (req, res) => {
-        let statementLine = "";
-
-        if (req.body.forum_api_key === "") {
-            statementLine = " IS NULL OR forum_api_key IS NOT NULL"
-        } else {
-            statementLine = "= ?";
-        }
         // Get user rows with certain column values or leave the column values blank to not take their values into account in the query.
         const statement = `SELECT * FROM users WHERE user_id = IF (? = '', user_id, ?)
             AND name = IF (? = '', name, ?)
             AND email = IF (? = '', email, ?)
-            AND disabled = IF (? = '', disabled, ?)
-            AND forum_api_key` + statementLine;
+            AND disabled = IF (? = '', disabled, ?)`;
 
         const values = [req.body.user_id, req.body.user_id, req.body.name, req.body.name, req.body.email, req.body.email,
-            req.body.disabled, req.body.disabled, req.body.forum_api_key, req.body.forum_api_key];
+            req.body.disabled, req.body.disabled];
         const result = await db.query(statement, values, res);
 
         res.send(result);
