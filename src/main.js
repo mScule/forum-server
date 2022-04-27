@@ -11,28 +11,29 @@ const
     {login} = require("./api/login"),
     {logout} = require("./api/logout"),
     publications = require("./api/publications"),
-    users = require("./api/users");
+    users = require("./api/users"),
+    votes = require("./api/votes");
 
 (async () => {
     const app = express();
 
     app.use(cors({
-        origin: "http://localhost:8081"
-    }),
-    bodyParser.urlencoded({extended: false}),
-    bodyParser.json(),
-    cookieParser(),
-    function (req, res, next) {
-        // check if client sent cookie
-        let cookie = req.cookies.forum_api_key;
-        if (cookie === undefined) {
-            console.log("Not logged in")
-        } else {
-            // yes, cookie was already present
-            console.log('Cookie already exists: ', cookie);
-        }
-        next();
-    });
+            origin: "http://localhost:8081"
+        }),
+        bodyParser.urlencoded({extended: false}),
+        bodyParser.json(),
+        cookieParser(),
+        function (req, res, next) {
+            // check if client sent cookie
+            let cookie = req.cookies.forum_api_key;
+            if (cookie === undefined) {
+                console.log("Not logged in")
+            } else {
+                // yes, cookie was already present
+                console.log('Cookie already exists: ', cookie);
+            }
+            next();
+        });
 
     // Login
     app.put("/login", (req, res) => login(req, res));
@@ -51,6 +52,12 @@ const
     app.put("/publications", (req, res) => publications.put(req, res));
     app.delete("/publications", (req, res) => publications.delete(req, res));
     app.get("/publications", (req, res) => publications.get(req, res));
+
+    // Votes
+    app.post("/votes", (req, res) => votes.post(req, res));
+    app.put("/votes", (req, res) => votes.put(req, res));
+    app.delete("/votes", (req, res) => votes.delete(req, res));
+    app.get("/votes", (req, res) => votes.get(req, res));
 
     const server = app.listen(config.server.port, () => {
         const
