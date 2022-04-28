@@ -22,11 +22,15 @@ module.exports = {
             res.send("Login error. " + result);
         } else {
             // set a new cookie on login
+            const statement = `SELECT user_id, name, email, image, disabled FROM users WHERE forum_api_key=? AND name=? AND password=?`
+            const values = [uuidV4, req.body.name, req.body.password];
+            const result = await db.query(statement, values, res);
+
             res.cookie('forum_api_key', uuidV4, {maxAge: 900000, httpOnly: true});
             console.log('cookie created successfully');
 
             res.status(201);
-            res.send("Login successful!");
+            res.send(result);
         }
     }
 }
