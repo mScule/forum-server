@@ -11,7 +11,7 @@ const connectionPool = mysql.createPool({
     database: config.mysql.database
 });
 
-function handleQuery(statement, values) {
+function executeQuery(statement, values) {
     return new Promise((resolve, reject) => {
         connectionPool.query(statement, values, (errors, results) => {
             if (errors)
@@ -23,20 +23,23 @@ function handleQuery(statement, values) {
 }
 
 module.exports = {
+    /*
+    * Query the database and return a result or an error and respond with different HTTP response status codes accordingly.
+    * */
     query: async (statement, values, res) => {
         res.status(202);
         try {
-            let resolve = await handleQuery(statement, values);
+            let resolve = await executeQuery(statement, values);
             console.log("resolve: " + JSON.stringify(resolve));
             console.log("resolve.length: " + resolve.length);
             console.log("resolve.affectedRows: " + resolve.affectedRows);
             if (resolve.length === 0) {
-                console.log("No result");
-                resolve = "No result";
+                console.log("No data found");
+                resolve = "No data found";
                 res.status(404);
             } else if (resolve.affectedRows === 0) {
-                console.log("No affected rows");
-                resolve = "No result";
+                console.log("No data modified");
+                resolve = "No data modified";
             } else if (resolve.affectedRows > 0 && resolve.changedRows === 0) {
                 // row created
                 res.status(201);
@@ -46,6 +49,7 @@ module.exports = {
             }
             return resolve;
         } catch (e) {
+            res.status(500);
             console.error(e.toString());
             return e;
         }

@@ -15,7 +15,7 @@ module.exports = {
         const values = [uuidV4, req.body.name, req.body.password];
         const result = await db.query(statement, values, res);
 
-        if (result === undefined || result === "No result") {
+        if (result === undefined || result === "No data modified" || result === "No data found") {
             res.status(401);
             res.send("Login failed. Check your username and password.");
         } else if (result instanceof Error) {
@@ -26,7 +26,7 @@ module.exports = {
             console.log('cookie created successfully');
 
             res.status(201);
-            res.send("Login successful");
+            res.send("Login successful!");
         }
     }
 }

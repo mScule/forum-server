@@ -13,9 +13,9 @@ module.exports = {
         const result = await db.query(statement, values, res);
         res.clearCookie("forum_api_key");
 
-        if (result === undefined || result === "No result") {
+        if (result === undefined || result === "No data modified" || result === "No data found" || result instanceof Error) {
             res.status(404);
-            res.send("Error logging out!");
+            res.send("Error logging out! " + result);
         } else {
             res.status(200);
             res.send("Logout successful");

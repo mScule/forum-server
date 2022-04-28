@@ -53,7 +53,7 @@ module.exports = {
         console.log("req.cookies.forum_api_key: " + req.cookies.forum_api_key)
         const result = await db.query(statement, values, res);
         console.log("result: " + result)
-        if (result !== "No result") {
+        if (result !== "No data found") {
             console.log("TEST");
             return result[0].user_id;
         } else {
