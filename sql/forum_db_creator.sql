@@ -43,13 +43,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` char(255) NOT NULL,
   `image` mediumblob DEFAULT NULL,
   `disabled` bit(1) NOT NULL,
-  `forum_api_key` bigint(20) unsigned DEFAULT NULL,
+  `forum_api_key` varchar(36) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `password` (`password`),
   UNIQUE KEY `forum_api_key` (`forum_api_key`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
