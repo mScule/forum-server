@@ -30,11 +30,16 @@ module.exports = {
     * Sets a publication private.
     * */
     put: async (req, res) => {
-        const currentUser = await users.getCurrentUser(req, res);
-        const statement = "UPDATE forum_db.publications SET private=? WHERE publication_id=? AND user_id=?";
-        const values = [req.body.private, req.body.publication_id, currentUser];
-        const result = await db.query(statement, values, res);
-        res.send("Publication put: " + result);
+        try {
+            const currentUser = await users.getCurrentUser(req, res);
+            const statement = "UPDATE forum_db.publications SET private=? WHERE publication_id=? AND user_id=?";
+            const values = [req.body.private, req.body.publication_id, currentUser];
+            const result = await db.query(statement, values, res);
+            res.send("Publication put: " + result);
+        } catch (e) {
+            res.status(401);
+            res.send("Error updating publication: " + e);
+        }
     },
     /*
     * Deletes a publication.
@@ -66,7 +71,7 @@ module.exports = {
             AND ` + statementLine;
         const values =
             [req.body.publication_id, req.body.publication_id, req.body.user_id, req.body.user_id, req.body.type,
-            req.body.type, req.body.title, req.body.title, req.body.content, req.body.content, req.body.private];
+                req.body.type, req.body.title, req.body.title, req.body.content, req.body.content, req.body.private];
         const result = await db.query(statement, values, res);
 
         res.send(result);
