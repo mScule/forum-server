@@ -5,12 +5,12 @@ const uuid = require("uuid");
 
 module.exports = {
     /*
-    * Logs the user in, creates a cookie to identify the user and adds if the given username and password match a user stored in the database.
-    * Insert the username as "name" and password as "password" in the HTTP request's body in JSON format.
+    * Logs the user in, creates a cookie to identify the user and adds if the given username and password
+    * match a user stored in the database. Insert the username as "name" and password as "password" in the
+    * HTTP request's body in JSON format.
     * */
     login: async (req, res) => {
         let uuidV4 = uuid.v4();
-
         const statement = "UPDATE forum_db.users SET forum_api_key=? WHERE name=? AND password=?";
         const values = [uuidV4, req.body.name, req.body.password];
         const result = await db.query(statement, values, res);
@@ -22,7 +22,8 @@ module.exports = {
             res.send("Login error. " + result);
         } else {
             // set a new cookie on login
-            const statement = `SELECT user_id, name, email, image, disabled FROM users WHERE forum_api_key=? AND name=? AND password=?`
+            const statement = `SELECT user_id, name, email, image, disabled FROM users WHERE forum_api_key=? AND name=? 
+                AND password=?`;
             const values = [uuidV4, req.body.name, req.body.password];
             const result = await db.query(statement, values, res);
 
