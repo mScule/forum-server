@@ -26,7 +26,7 @@ const
         cookieParser(),
         function (req, res, next) {
             // check if client sent cookie
-            let cookie = req.cookies.forum_api_key;
+            let cookie = req.cookies["forum_api_key"];
             if (cookie === undefined) {
                 console.log("Not logged in")
             } else {

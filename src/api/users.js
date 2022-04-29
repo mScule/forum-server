@@ -19,7 +19,7 @@ module.exports = {
 
     delete: async (req, res) => {
         const statement = "DELETE FROM users WHERE email=? AND password=? AND forum_api_key=?";
-        const values = [req.body.email, req.body.password, req.cookies.forum_api_key];
+        const values = [req.body.email, req.body.password, req.cookies["forum_api_key"]];
         const result = await db.query(statement, values, res);
         res.send("Users delete: " + result);
     },
@@ -52,8 +52,8 @@ module.exports = {
 
     getCurrentUser: async (req, res) => {
         const statement = "SELECT user_id FROM users WHERE forum_api_key =?";
-        const values = [req.cookies.forum_api_key];
-        console.log("req.cookies.forum_api_key: " + req.cookies.forum_api_key)
+        const values = [req.cookies["forum_api_key"]];
+        console.log("req.cookies['forum_api_key']: " + req.cookies["forum_api_key"])
         const result = await db.query(statement, values, res);
         console.log("result: " + result)
         if (result !== "No data found") {
