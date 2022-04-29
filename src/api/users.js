@@ -27,28 +27,30 @@ module.exports = {
     },
 
     get: async (req, res) => {
-        // // Get user rows with certain column values or don't take the column values into account if the request
-        // // for them is "any".
-        // let statementLine = "disabled = disabled";
-        //
-        // if (req.body.disabled === 1 || req.body.disabled === "1") {
-        //     statementLine = "disabled = 1";
-        // } else if (req.body.disabled === 0 || req.body.disabled === "0") {
-        //     statementLine = "disabled = 0";
-        // }
-        // const statement = `SELECT user_id, name, email, image, disabled FROM users
-        //     WHERE user_id = IF (? = "any", user_id, ?)
-        //     AND name = IF (? = "any", name, ?)
-        //     AND email = IF (? = "any", email, ?)
-        //     AND password = password
-        //     AND ` + statementLine;
-        //
-        // const values = [req.body.user_id, req.body.user_id, req.body.name, req.body.name, req.body.email,
-        // req.body.email, req.body.disabled, req.body.disabled];
+        let statement = `SELECT user_id, name, email, image, disabled FROM users WHERE forum_api_key = ?`;
+        let values = [req.cookies["forum_api_key"]];
 
-        const statement = `SELECT user_id, name, email, image, disabled FROM users WHERE forum_api_key = ?`;
+        if (req.query["get_current_user"] === "false") {
+            // Get user rows with certain column values or don't take the column values into account if the request
+            // for them is "any".
+            let statementLine = "disabled = disabled";
 
-        const values = [req.cookies["forum_api_key"]];
+            if (req.body.disabled === 1 || req.body.disabled === "1") {
+                statementLine = "disabled = 1";
+            } else if (req.body.disabled === 0 || req.body.disabled === "0") {
+                statementLine = "disabled = 0";
+            }
+            statement = `SELECT user_id, name, email, image, disabled FROM users
+            WHERE user_id = IF (? = "any", user_id, ?)
+            AND name = IF (? = "any", name, ?)
+            AND email = IF (? = "any", email, ?)
+            AND password = password
+            AND ` + statementLine;
+
+            values = [req.body.user_id, req.body.user_id, req.body.name, req.body.name, req.body.email,
+                req.body.email, req.body.disabled, req.body.disabled];
+        }
+
         const result = await db.query(statement, values, res);
 
         res.send(result);
