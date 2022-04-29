@@ -24,7 +24,8 @@ function executeQuery(statement, values) {
 
 module.exports = {
     /*
-    * Query the database and return a result or an error and respond with different HTTP response status codes accordingly.
+    * Query the database and return a result or an error and respond with different HTTP response status codes
+    * accordingly.
     * */
     query: async (statement, values, res) => {
         res.status(202);
