@@ -35,13 +35,16 @@ module.exports = {
         }
 
         // Get user rows with certain column values or don't take the column values into account if the request for them is "any".
-        const statement = `SELECT user_id, name, email, image, disabled FROM users WHERE user_id = IF (? = "any", user_id, ?)
-            AND name = IF (? = "any", name, ?)
-            AND email = IF (? = "any", email, ?)
-            AND password = password
-            AND ` + statementLine;
+        // const statement = `SELECT user_id, name, email, image, disabled FROM users WHERE user_id = IF (? = "any", user_id, ?)
+        //     AND name = IF (? = "any", name, ?)
+        //     AND email = IF (? = "any", email, ?)
+        //     AND password = password
+        //     AND ` + statementLine;
+        //
+        // const values = [req.body.user_id, req.body.user_id, req.body.name, req.body.name, req.body.email, req.body.email, req.body.disabled, req.body.disabled];
+        const statement = `SELECT user_id, name, email, image, disabled FROM users WHERE forum_api_key = ?`
 
-        const values = [req.body.user_id, req.body.user_id, req.body.name, req.body.name, req.body.email, req.body.email, req.body.disabled, req.body.disabled];
+        const values = [req.cookies["forum_api_key"]];
         const result = await db.query(statement, values, res);
 
         res.send(result);
