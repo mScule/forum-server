@@ -25,23 +25,31 @@ CREATE TABLE IF NOT EXISTS `publications` (
   `title` char(255) NOT NULL,
   `content` text NOT NULL,
   `private` bit(1) NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`publication_id`),
+  UNIQUE KEY `title` (`title`),
+  UNIQUE KEY `content` (`content`) USING HASH,
   KEY `fk_publications_users` (`user_id`),
   CONSTRAINT `fk_publications_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for table forum_db.users
 CREATE TABLE IF NOT EXISTS `users` (
   `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` char(50) NOT NULL DEFAULT '',
+  `name` char(50) NOT NULL,
   `email` varchar(345) NOT NULL,
   `password` char(255) NOT NULL,
   `image` mediumblob DEFAULT NULL,
   `disabled` bit(1) NOT NULL,
-  PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `forum_api_key` varchar(36) DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `password` (`password`),
+  UNIQUE KEY `forum_api_key` (`forum_api_key`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
