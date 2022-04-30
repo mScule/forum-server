@@ -12,7 +12,7 @@ module.exports = {
     * */
     post: async (req, res) => {
         try {
-            const currentUser = await users.getCurrentUser(req, res);
+            const currentUser = await users.getCurrentUserId(req, res);
             console.log("currentUser: " + currentUser);
 
             const statement = `INSERT INTO forum_db.publications (user_id, type, title, content, private) 
@@ -27,11 +27,12 @@ module.exports = {
         }
     },
     /*
-    * Sets a publication private.
+    * Sets a publication's private value to be the value of a "private" property in an HTTP request's body.
+    * Also requires a "publication_id" property in the HTTP request's body to specify which publication will be modified.
     * */
     put: async (req, res) => {
         try {
-            const currentUser = await users.getCurrentUser(req, res);
+            const currentUser = await users.getCurrentUserId(req, res);
             const statement = "UPDATE forum_db.publications SET private=? WHERE publication_id=? AND user_id=?";
             const values = [req.body.private, req.body.publication_id, currentUser];
             const result = await db.query(statement, values, res);
@@ -42,7 +43,7 @@ module.exports = {
         }
     },
     /*
-    * Deletes a publication.
+    * Deletes a publication which matches the given "publication_id" property's value.
     * */
     delete: async (req, res) => {
         const statement = "DELETE FROM publications WHERE publication_id=?";
@@ -51,7 +52,8 @@ module.exports = {
         res.send("Publication delete: " + result);
     },
     /*
-    * Gets publications
+    * Gets publications with specified column values. If you don't want to take certain or any of the column values
+    * into account in the query, insert the value "any" to their respective properties in the HTTP request's body.
     * */
     get: async (req, res) => {
         let statementLine = "";
@@ -61,8 +63,6 @@ module.exports = {
         } else {
             statementLine = "private = ?";
         }
-        // Get publication rows with certain column values or don't take the column values into account if the
-        // request for them is "any".
         const statement = `SELECT * FROM publications WHERE publication_id = IF (? = "any", publication_id, ?) 
             AND user_id = IF (? = "any", user_id, ?) 
             AND type = IF (? = "any", type, ?)
