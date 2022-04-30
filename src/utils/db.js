@@ -11,6 +11,10 @@ const connectionPool = mysql.createPool({
     database: config.mysql.database
 });
 
+/*
+* Executes a database query and returns a rejection with errors if the query has problems or a resolve with results
+* if the query was successful.
+* */
 function executeQuery(statement, values) {
     return new Promise((resolve, reject) => {
         connectionPool.query(statement, values, (errors, results) => {
@@ -24,8 +28,8 @@ function executeQuery(statement, values) {
 
 module.exports = {
     /*
-    * Query the database and return a result or an error and respond with different HTTP response status codes
-    * accordingly.
+    * Queries the database and returns results or errors. Responds with different HTTP response status codes
+    * according to the query's outcome.
     * */
     query: async (statement, values, res) => {
         res.status(202);
