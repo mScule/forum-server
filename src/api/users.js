@@ -16,27 +16,39 @@ module.exports = {
 
     /*
     * Updates a user's info. Requires the user's new email "email_new", new password "password_new", "disabled" status,
-    * current email "email_current", current password "password_current" and "forum_api_key" as properties in the HTTP
+    * current email "email_current" and current password "password_current" as properties in the HTTP
     * request's body.
     * */
     put: async (req, res) => {
-        const statement = `UPDATE forum_db.users SET email=?, password=?, disabled=? WHERE email=? 
-            AND password=? AND forum_api_key=?`;
-        const values = [req.body.email_new, req.body.password_new, req.body.disabled,
-            req.body.email_current, req.body.password_current, req.body.forum_api_key];
-        const result = await db.query(statement, values, res);
-        res.send("Users put: " + JSON.stringify(result));
+        try {
+            const currentUserId = await module.exports.getCurrentUserId(req, res);
+            const statement = `UPDATE forum_db.users SET email=?, password=?, disabled=? WHERE email=? 
+            AND password=? AND user_id=?`;
+            const values = [req.body.email_new, req.body.password_new, req.body.disabled,
+                req.body.email_current, req.body.password_current, currentUserId];
+            const result = await db.query(statement, values, res);
+            res.send("Users put: " + JSON.stringify(result));
+        } catch (e) {
+            res.status(401);
+            res.send("Error updating user info: " + e);
+        }
     },
 
     /*
-    * Deletes a user. Requires the user's "email", "password" and "forum_api_key" as properties in the HTTP
+    * Deletes a user. Requires the user's "email" and "password" as properties in the HTTP
     * request's body.
     * */
     delete: async (req, res) => {
-        const statement = "DELETE FROM users WHERE email=? AND password=? AND forum_api_key=?";
-        const values = [req.body.email, req.body.password, req.cookies["forum_api_key"]];
-        const result = await db.query(statement, values, res);
-        res.send("Users delete: " + result);
+        try {
+            const currentUserId = await module.exports.getCurrentUserId(req, res);
+            const statement = "DELETE FROM users WHERE email=? AND password=? AND user_id=?";
+            const values = [req.body.email, req.body.password, currentUserId];
+            const result = await db.query(statement, values, res);
+            res.send("Users delete: " + JSON.stringify(result));
+        } catch (e) {
+            res.status(401);
+            res.send("Error deleting user: " + e);
+        }
     },
 
     /*
