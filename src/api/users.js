@@ -63,9 +63,9 @@ module.exports = {
         if (req.query["get_current_user"] === "false") {
             let statementLine = "disabled = disabled";
 
-            if (req.body.disabled === 1 || req.body.disabled === "1") {
+            if (req.query.disabled === 1 || req.query.disabled === "1") {
                 statementLine = "disabled = 1";
-            } else if (req.body.disabled === 0 || req.body.disabled === "0") {
+            } else if (req.query.disabled === 0 || req.query.disabled === "0") {
                 statementLine = "disabled = 0";
             }
             statement = `SELECT user_id, name, email, image, disabled FROM users
@@ -75,8 +75,8 @@ module.exports = {
             AND password = password
             AND ` + statementLine;
 
-            values = [req.body.user_id, req.body.user_id, req.body.name, req.body.name, req.body.email,
-                req.body.email, req.body.disabled, req.body.disabled];
+            values = [req.query.user_id, req.query.user_id, req.query.name, req.query.name, req.query.email,
+                req.query.email, req.query.disabled, req.query.disabled];
         }
 
         const result = await db.query(statement, values, res);

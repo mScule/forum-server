@@ -64,8 +64,8 @@ module.exports = {
             AND publication_id = IF (? = "any", publication_id, ?)
             AND vote = IF (? = "any", vote, ?)`;
 
-        const values = [req.body.user_id, req.body.user_id, req.body.publication_id, req.body.publication_id,
-            req.body.vote, req.body.vote];
+        const values = [req.query.user_id, req.query.user_id, req.query.publication_id, req.query.publication_id,
+            req.query.vote, req.query.vote];
         const result = await db.query(statement, values, res);
 
         res.send(result);

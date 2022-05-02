@@ -58,7 +58,7 @@ module.exports = {
     get: async (req, res) => {
         let statementLine = "";
 
-        if (req.body.private === "any") {
+        if (req.query.private === "any") {
             statementLine = " (private IS NULL OR private IS NOT NULL)";
         } else {
             statementLine = "private = ?";
@@ -70,8 +70,8 @@ module.exports = {
             AND content = IF (? = "any", content, ?)
             AND ` + statementLine;
         const values =
-            [req.body.publication_id, req.body.publication_id, req.body.user_id, req.body.user_id, req.body.type,
-                req.body.type, req.body.title, req.body.title, req.body.content, req.body.content, req.body.private];
+            [req.query.publication_id, req.query.publication_id, req.query.user_id, req.query.user_id, req.query.type,
+                req.query.type, req.query.title, req.query.title, req.query.content, req.query.content, req.query.private];
         const result = await db.query(statement, values, res);
 
         res.send(result);
