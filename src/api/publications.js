@@ -73,6 +73,7 @@ module.exports = {
                 queryPrivate = " (private IS NULL OR private IS NOT NULL)";
             } else {
                 queryPrivate = "private = ?";
+                values.push(req.query.private)
             }
 
             // Query for publications with any date if there are no boundary dates specified in the request
