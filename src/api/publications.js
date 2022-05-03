@@ -20,7 +20,7 @@ module.exports = {
 
             const statement = `INSERT INTO forum_db.publications (user_id, type, title, content, private, reply_to_id) 
                 VALUES (?, ?, ?, ?, ?, ?)`;
-            const values = [currentUser, req.body.type, req.body.title, req.body.content, 0, req.body.reply_to_id];
+            const values = [currentUserId, req.body.type, req.body.title, req.body.content, 0, req.body.reply_to_id];
             const result = await db.query(statement, values, res);
 
             clearCache("/publications");
