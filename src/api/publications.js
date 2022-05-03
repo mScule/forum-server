@@ -14,12 +14,12 @@ module.exports = {
     * */
     post: async (req, res) => {
         try {
-            const currentUser = await users.getCurrentUserId(req, res);
-            console.log("currentUser: " + currentUser);
+            const currentUserId = mcache.get("userId");
+            console.log("currentUserId: " + currentUserId);
 
             const statement = `INSERT INTO forum_db.publications (user_id, type, title, content, private) 
                 VALUES (?, ?, ?, ?, ?)`;
-            const values = [currentUser, req.body.type, req.body.title, req.body.content, 0];
+            const values = [currentUserId, req.body.type, req.body.title, req.body.content, 0];
             const result = await db.query(statement, values, res, "/publications");
 
             clearCache("/publications");
@@ -35,9 +35,9 @@ module.exports = {
     * */
     put: async (req, res) => {
         try {
-            const currentUser = await users.getCurrentUserId(req, res);
+            const currentUserId = mcache.get("userId");
             const statement = "UPDATE forum_db.publications SET private=? WHERE publication_id=? AND user_id=?";
-            const values = [req.body.private, req.body.publication_id, currentUser];
+            const values = [req.body.private, req.body.publication_id, currentUserId];
             const result = await db.query(statement, values, res, "/publications");
             res.send("Publication put: " + result);
         } catch (e) {

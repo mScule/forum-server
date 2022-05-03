@@ -10,10 +10,10 @@ module.exports = {
     * */
     post: async (req, res) => {
         try {
-            const currentUser = await users.getCurrentUserId(req, res);
+            const currentUserId = mcache.get("userId");
 
             const statement = "INSERT INTO forum_db.votes (publication_id, user_id, vote) VALUES (?, ?, ?)";
-            const values = [req.body.publication_id, currentUser, req.body.vote];
+            const values = [req.body.publication_id, currentUserId, req.body.vote];
             const result = await db.query(statement, values, res, "/votes");
             res.send(result);
         } catch (e) {
@@ -27,10 +27,10 @@ module.exports = {
     * */
     put: async (req, res) => {
         try {
-            const currentUser = await users.getCurrentUserId(req, res);
+            const currentUserId = mcache.get("userId");
 
             const statement = "UPDATE forum_db.votes SET vote=? WHERE publication_id=? AND user_id=?";
-            const values = [req.body.vote, req.body.publication_id, currentUser];
+            const values = [req.body.vote, req.body.publication_id, currentUserId];
             const result = await db.query(statement, values, res, "/votes");
             res.send("Votes put: " + JSON.stringify(result));
         } catch (e) {
@@ -44,10 +44,10 @@ module.exports = {
     * */
     delete: async (req, res) => {
         try {
-            const currentUser = await users.getCurrentUserId(req, res);
+            const currentUserId = mcache.get("userId");
 
             const statement = "DELETE FROM votes WHERE publication_id=? AND user_id=?";
-            const values = [req.body.publication_id, currentUser];
+            const values = [req.body.publication_id, currentUserId];
             const result = await db.query(statement, values, res, "/votes");
             res.send("Votes delete: " + result);
         } catch (e) {

@@ -1,6 +1,7 @@
 "use strict";
 
 const db = require("../utils/db");
+const mcache = require("memory-cache");
 
 module.exports = {
     /*
@@ -19,6 +20,7 @@ module.exports = {
             res.status(404);
             res.send("Error logging out! " + result);
         } else {
+            mcache.del("userId");
             res.status(200);
             res.send("Logout successful");
         }

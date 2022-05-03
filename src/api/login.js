@@ -2,6 +2,7 @@
 
 const db = require("../utils/db");
 const uuid = require("uuid");
+const mcache = require("memory-cache");
 
 module.exports = {
     /*
@@ -30,6 +31,7 @@ module.exports = {
             res.cookie('forum_api_key', uuidV4, {maxAge: 900000, httpOnly: true});
             console.log('cookie created successfully');
 
+            mcache.put("userId", result[0].user_id, 900000);
             res.status(201);
             res.send(result);
         }

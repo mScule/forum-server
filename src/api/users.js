@@ -22,7 +22,7 @@ module.exports = {
     * */
     put: async (req, res) => {
         try {
-            const currentUserId = await module.exports.getCurrentUserId(req, res);
+            const currentUserId = mcache.get("userId");
             const statement = `UPDATE forum_db.users SET email=?, password=?, disabled=? WHERE email=? 
             AND password=? AND user_id=?`;
             const values = [req.body.email_new, req.body.password_new, req.body.disabled,
@@ -41,7 +41,7 @@ module.exports = {
     * */
     delete: async (req, res) => {
         try {
-            const currentUserId = await module.exports.getCurrentUserId(req, res);
+            const currentUserId = mcache.get("userId");
             const statement = "DELETE FROM users WHERE email=? AND password=? AND user_id=?";
             const values = [req.body.email, req.body.password, currentUserId];
             const result = await db.query(statement, values, res, "/users");
@@ -88,29 +88,6 @@ module.exports = {
 
             mcache.put(req.originalUrl, result, 900000);
             res.send(result);
-        }
-    },
-
-    /*
-    * Gets the currently logged-in user's id.
-    * */
-    getCurrentUserId: async (req, res) => {
-        if (mcache.get(req.originalUrl)) { // Check if there's already cached data
-            console.log("sent cached data from " + req.originalUrl);
-            return mcache.get(req.originalUrl);
-        } else {
-            const statement = "SELECT user_id FROM users WHERE forum_api_key =?";
-            const values = [req.cookies["forum_api_key"]];
-            console.log("req.cookies['forum_api_key']: " + req.cookies["forum_api_key"]);
-            const result = await db.query(statement, values, res, "/users");
-            console.log("result: " + result);
-            if (result !== "No data found") {
-                console.log("TEST");
-                mcache.put(req.originalUrl, result[0].user_id, 900000);
-                return result[0].user_id;
-            } else {
-                throw result;
-            }
         }
     }
 }
