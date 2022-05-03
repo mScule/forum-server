@@ -7,17 +7,18 @@ module.exports = {
     /*
     * Gets the current user's id from the database with the "forum_api_key" cookie which identifies the user.
     * Adds a publication to the database which is associated with the current user's id.
-    * Insert the to be added publication's type as "type", title as "title" and content as "content" in the
-    * HTTP request's body in JSON format.
+    * Insert the to be added publication's type as "type", title as "title", content as "content" and if the
+    * publication is a reply to another publication, add the publication's id which the to be added publication
+    * replies to as "reply_to_id" in the HTTP request's body in JSON format.
     * */
     post: async (req, res) => {
         try {
             const currentUser = await users.getCurrentUserId(req, res);
             console.log("currentUser: " + currentUser);
 
-            const statement = `INSERT INTO forum_db.publications (user_id, type, title, content, private) 
-                VALUES (?, ?, ?, ?, ?)`;
-            const values = [currentUser, req.body.type, req.body.title, req.body.content, 0];
+            const statement = `INSERT INTO forum_db.publications (user_id, type, title, content, private, reply_to_id) 
+                VALUES (?, ?, ?, ?, ?, ?)`;
+            const values = [currentUser, req.body.type, req.body.title, req.body.content, 0, req.body.reply_to_id];
             const result = await db.query(statement, values, res);
 
             res.send("Publication post result: " + result);
@@ -59,7 +60,8 @@ module.exports = {
 
         const values =
             [req.query.publication_id, req.query.publication_id, req.query.user_id, req.query.user_id, req.query.type,
-                req.query.type, req.query.title, req.query.title, req.query.content, req.query.content];
+                req.query.type, req.query.title, req.query.title, req.query.content, req.query.content,
+                req.query.reply_to_id, req.query.reply_to_id];
 
         let queryPrivate = "";
 
@@ -94,6 +96,7 @@ module.exports = {
             AND type = IF (? = "any", type, ?)
             AND title = IF (? = "any", title, ?)
             AND content = IF (? = "any", content, ?)
+            AND reply_to_id = IF (? = "any", reply_to_id, ?)
             AND ` + queryPrivate + queryDate;
         const result = await db.query(statement, values, res);
 
