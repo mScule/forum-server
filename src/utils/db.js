@@ -2,7 +2,8 @@
 
 const
     mysql = require("mysql"),
-    {config} = require("./config");
+    {config} = require("./config"),
+    {clearCache} = require("../api/cache");
 
 const connectionPool = mysql.createPool({
     host: config.mysql.host,
@@ -31,7 +32,7 @@ module.exports = {
     * Queries the database and returns results or errors. Responds with different HTTP response status codes
     * according to the query's outcome.
     * */
-    query: async (statement, values, res) => {
+    query: async (statement, values, res, urlRoot) => {
         res.status(202);
         try {
             let resolve = await executeQuery(statement, values);
@@ -47,9 +48,11 @@ module.exports = {
                 resolve = "No data modified";
             } else if (resolve.affectedRows > 0 && resolve.changedRows === 0) {
                 // row created
+                clearCache(urlRoot);
                 res.status(201);
             } else if (resolve.affectedRows > 0 && resolve.changedRows > 0) {
                 // row updated
+                clearCache(urlRoot);
                 res.status(200);
             }
             return resolve;

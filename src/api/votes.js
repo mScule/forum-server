@@ -2,6 +2,7 @@
 
 const db = require("../utils/db");
 const users = require("./users");
+const mcache = require("memory-cache");
 
 module.exports = {
     /*
@@ -13,7 +14,7 @@ module.exports = {
 
             const statement = "INSERT INTO forum_db.votes (publication_id, user_id, vote) VALUES (?, ?, ?)";
             const values = [req.body.publication_id, currentUser, req.body.vote];
-            const result = await db.query(statement, values, res);
+            const result = await db.query(statement, values, res, "/votes");
             res.send(result);
         } catch (e) {
             res.status(401);
@@ -30,7 +31,7 @@ module.exports = {
 
             const statement = "UPDATE forum_db.votes SET vote=? WHERE publication_id=? AND user_id=?";
             const values = [req.body.vote, req.body.publication_id, currentUser];
-            const result = await db.query(statement, values, res);
+            const result = await db.query(statement, values, res, "/votes");
             res.send("Votes put: " + JSON.stringify(result));
         } catch (e) {
             res.status(401);
@@ -47,7 +48,7 @@ module.exports = {
 
             const statement = "DELETE FROM votes WHERE publication_id=? AND user_id=?";
             const values = [req.body.publication_id, currentUser];
-            const result = await db.query(statement, values, res);
+            const result = await db.query(statement, values, res, "/votes");
             res.send("Votes delete: " + result);
         } catch (e) {
             res.status(401);
@@ -60,14 +61,20 @@ module.exports = {
     * account in the query, insert the value "any" to their respective properties in the HTTP request's body.
     * */
     get: async (req, res) => {
-        const statement = `SELECT * FROM votes WHERE user_id = IF (? = "any", user_id, ?)
+        if (mcache.get(req.originalUrl)) { // Check if there's already cached data
+            console.log("sent cached data from " + req.originalUrl);
+            res.send(mcache.get(req.originalUrl));
+        } else {
+            const statement = `SELECT * FROM votes WHERE user_id = IF (? = "any", user_id, ?)
             AND publication_id = IF (? = "any", publication_id, ?)
             AND vote = IF (? = "any", vote, ?)`;
 
-        const values = [req.query.user_id, req.query.user_id, req.query.publication_id, req.query.publication_id,
-            req.query.vote, req.query.vote];
-        const result = await db.query(statement, values, res);
+            const values = [req.query.user_id, req.query.user_id, req.query.publication_id, req.query.publication_id,
+                req.query.vote, req.query.vote];
+            const result = await db.query(statement, values, res, "/votes");
 
-        res.send(result);
+            mcache.put(req.originalUrl, result, 900000);
+            res.send(result);
+        }
     }
 }

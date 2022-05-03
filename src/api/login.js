@@ -13,7 +13,7 @@ module.exports = {
         let uuidV4 = uuid.v4();
         const statement = "UPDATE forum_db.users SET forum_api_key=? WHERE name=? AND password=?";
         const values = [uuidV4, req.body.name, req.body.password];
-        const result = await db.query(statement, values, res);
+        const result = await db.query(statement, values, res, "/users");
 
         if (result === undefined || result === "No data modified" || result === "No data found") {
             res.status(401);
@@ -21,12 +21,12 @@ module.exports = {
         } else if (result instanceof Error) {
             res.send("Login error. " + result);
         } else {
-            // set a new cookie on login
             const statement = `SELECT user_id, name, email, image, disabled FROM users WHERE forum_api_key=? AND name=? 
                 AND password=?`;
             const values = [uuidV4, req.body.name, req.body.password];
-            const result = await db.query(statement, values, res);
+            const result = await db.query(statement, values, res, "/users");
 
+            // set a new cookie on login
             res.cookie('forum_api_key', uuidV4, {maxAge: 900000, httpOnly: true});
             console.log('cookie created successfully');
 
