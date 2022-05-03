@@ -56,22 +56,45 @@ module.exports = {
     * into account in the query, insert the value "any" to their respective properties in the HTTP request's body.
     * */
     get: async (req, res) => {
-        let statementLine = "";
+
+        const values =
+            [req.query.publication_id, req.query.publication_id, req.query.user_id, req.query.user_id, req.query.type,
+                req.query.type, req.query.title, req.query.title, req.query.content, req.query.content];
+
+        let queryPrivate = "";
 
         if (req.query.private === "any") {
-            statementLine = " (private IS NULL OR private IS NOT NULL)";
+            queryPrivate = " (private IS NULL OR private IS NOT NULL)";
         } else {
-            statementLine = "private = ?";
+            queryPrivate = "private = ?";
         }
+
+        // Query for publications with any date if there are no boundary dates specified in the request
+        let queryDate = " AND date = date";
+
+        // Check if only a minimum date is specified for a range of dates
+        if (req.query.date_min && req.query.date_min !== "" && (!req.query.date_max || req.query.date_max === "")) {
+            queryDate = " AND date >= ?";
+            values.push(req.query.date_min);
+        }
+        // Check if only a maximum date is specified for a range of dates
+        else if (req.query.date_max && req.query.date_max !== "" && (!req.query.date_min || req.query.date_min === "")) {
+            queryDate = " AND date <= ?";
+            values.push(req.query.date_max);
+        }
+        // Check if a minimum and a maximum bound are specified for a range of dates
+        else if (req.query.date_max && req.query.date_max !== "" && req.query.date_min && req.query.date_min !== "") {
+            queryDate = " AND (date BETWEEN ? AND ?)";
+            values.push(req.query.date_min);
+            values.push(req.query.date_max);
+        }
+
         const statement = `SELECT * FROM publications WHERE publication_id = IF (? = "any", publication_id, ?) 
             AND user_id = IF (? = "any", user_id, ?) 
             AND type = IF (? = "any", type, ?)
             AND title = IF (? = "any", title, ?)
             AND content = IF (? = "any", content, ?)
-            AND ` + statementLine;
-        const values =
-            [req.query.publication_id, req.query.publication_id, req.query.user_id, req.query.user_id, req.query.type,
-                req.query.type, req.query.title, req.query.title, req.query.content, req.query.content, req.query.private];
+            AND ` + queryPrivate + queryDate;
         const result = await db.query(statement, values, res);
 
         res.send(result);
