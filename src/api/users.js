@@ -22,7 +22,7 @@ module.exports = {
     * */
     put: async (req, res) => {
         try {
-            const currentUserId = mcache.get("userId");
+            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
             const statement = `UPDATE forum_db.users SET email=?, password=?, disabled=? WHERE email=? 
             AND password=? AND user_id=?`;
             const values = [req.body.email_new, req.body.password_new, req.body.disabled,
@@ -41,7 +41,7 @@ module.exports = {
     * */
     delete: async (req, res) => {
         try {
-            const currentUserId = mcache.get("userId");
+            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
             const statement = "DELETE FROM users WHERE email=? AND password=? AND user_id=?";
             const values = [req.body.email, req.body.password, currentUserId];
             const result = await db.query(statement, values, res, "/users");

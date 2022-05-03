@@ -31,7 +31,7 @@ module.exports = {
             res.cookie('forum_api_key', uuidV4, {maxAge: 900000, httpOnly: true});
             console.log('cookie created successfully');
 
-            mcache.put("userId", result[0].user_id, 900000);
+            mcache.put(uuidV4, result[0].user_id, 900000);
             res.status(201);
             res.send(result);
         }

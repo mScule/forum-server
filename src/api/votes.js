@@ -10,7 +10,7 @@ module.exports = {
     * */
     post: async (req, res) => {
         try {
-            const currentUserId = mcache.get("userId");
+            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
 
             const statement = "INSERT INTO forum_db.votes (publication_id, user_id, vote) VALUES (?, ?, ?)";
             const values = [req.body.publication_id, currentUserId, req.body.vote];
@@ -27,7 +27,7 @@ module.exports = {
     * */
     put: async (req, res) => {
         try {
-            const currentUserId = mcache.get("userId");
+            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
 
             const statement = "UPDATE forum_db.votes SET vote=? WHERE publication_id=? AND user_id=?";
             const values = [req.body.vote, req.body.publication_id, currentUserId];
@@ -44,7 +44,7 @@ module.exports = {
     * */
     delete: async (req, res) => {
         try {
-            const currentUserId = mcache.get("userId");
+            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
 
             const statement = "DELETE FROM votes WHERE publication_id=? AND user_id=?";
             const values = [req.body.publication_id, currentUserId];

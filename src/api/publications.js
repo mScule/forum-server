@@ -14,7 +14,7 @@ module.exports = {
     * */
     post: async (req, res) => {
         try {
-            const currentUserId = mcache.get("userId");
+            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
             console.log("currentUserId: " + currentUserId);
 
             const statement = `INSERT INTO forum_db.publications (user_id, type, title, content, private) 
@@ -35,7 +35,7 @@ module.exports = {
     * */
     put: async (req, res) => {
         try {
-            const currentUserId = mcache.get("userId");
+            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
             const statement = "UPDATE forum_db.publications SET private=? WHERE publication_id=? AND user_id=?";
             const values = [req.body.private, req.body.publication_id, currentUserId];
             const result = await db.query(statement, values, res, "/publications");
