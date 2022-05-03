@@ -12,6 +12,7 @@ module.exports = {
             if (mcache.keys()[i].startsWith(urlRoot)) {
                 console.log("mcache.keys()[i]: " + mcache.keys()[i])
                 mcache.del(mcache.keys()[i]);
+                i--;
             }
         }
     }
