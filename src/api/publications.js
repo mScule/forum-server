@@ -3,7 +3,6 @@
 const db = require("../utils/db");
 const users = require("./users");
 const mcache = require("memory-cache");
-const {clearCache} = require("./cache");
 
 module.exports = {
     /*
@@ -23,7 +22,6 @@ module.exports = {
             const values = [currentUserId, req.body.type, req.body.title, req.body.content, 0, req.body.reply_to_id];
             const result = await db.query(statement, values, res);
 
-            clearCache("/publications");
             res.send("Publication post result: " + result);
         } catch (e) {
             res.status(401);
