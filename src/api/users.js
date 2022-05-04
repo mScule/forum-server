@@ -23,9 +23,9 @@ module.exports = {
     put: async (req, res) => {
         try {
             const currentUserId = mcache.get(req.cookies["forum_api_key"]);
-            const statement = `UPDATE forum_db.users SET email=?, password=?, disabled=? WHERE email=? 
+            const statement = `UPDATE forum_db.users SET name=?, email=?, password=?, disabled=? WHERE email=? 
             AND password=? AND user_id=?`;
-            const values = [req.body.email_new, req.body.password_new, req.body.disabled,
+            const values = [req.body.username_new, req.body.email_new, req.body.password_new, req.body.disabled,
                 req.body.email_current, req.body.password_current, currentUserId];
             const result = await db.query(statement, values, res, "/users");
             res.send("Users put: " + JSON.stringify(result));
