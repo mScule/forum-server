@@ -34,9 +34,11 @@ module.exports = {
     * */
     query: async (statement, values, res, urlRoot) => {
         res.status(202);
+        console.log(JSON.stringify(values));
+        console.log(JSON.stringify(statement));
         try {
             let resolve = await executeQuery(statement, values);
-            console.log("resolve: " + JSON.stringify(resolve));
+            // console.log("resolve: " + JSON.stringify(resolve));
             console.log("resolve.length: " + resolve.length);
             console.log("resolve.affectedRows: " + resolve.affectedRows);
             if (resolve.length === 0) {

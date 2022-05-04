@@ -64,16 +64,22 @@ module.exports = {
         } else {
             const values =
                 [req.query.publication_id, req.query.publication_id, req.query.user_id, req.query.user_id, req.query.type,
-                    req.query.type, req.query.title, req.query.title, req.query.content, req.query.content,
-                    req.query.reply_to_id, req.query.reply_to_id];
+                    req.query.type, req.query.title, req.query.title, req.query.content, req.query.content];
 
             let queryPrivate = "";
-
             if (req.query.private === "any") {
-                queryPrivate = " (private IS NULL OR private IS NOT NULL)";
+                queryPrivate = " AND (private IS NULL OR private IS NOT NULL)";
             } else {
-                queryPrivate = "private = ?";
-                values.push(req.query.private)
+                queryPrivate = " AND private = ?";
+                values.push(req.query.private);
+            }
+
+            let queryReplyToId = "";
+            if (req.query.reply_to_id === "any") {
+                queryReplyToId = " AND (reply_to_id IS NULL OR reply_to_id IS NOT NULL)";
+            } else {
+                queryReplyToId = " AND reply_to_id = ?";
+                values.push(req.query.reply_to_id);
             }
 
             // Query for publications with any date if there are no boundary dates specified in the request
@@ -100,9 +106,8 @@ module.exports = {
             AND user_id = IF (? = "any", user_id, ?) 
             AND type = IF (? = "any", type, ?)
             AND title = IF (? = "any", title, ?)
-            AND content = IF (? = "any", content, ?)
-            AND reply_to_id = IF (? = "any", reply_to_id, ?)
-            AND ` + queryPrivate + queryDate;
+            AND content = IF (? = "any", content, ?)`
+                + queryPrivate + queryReplyToId + queryDate;
             const result = await db.query(statement, values, res, "/publications");
 
             mcache.put(req.originalUrl, result, 900000);
