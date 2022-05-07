@@ -57,6 +57,8 @@ module.exports = {
      *                         type: array
      *                         items:
      *                           type: integer
+     *       202:
+     *         description: The request was accepted be used in a database query.
      *       401:
      *         description: Login failed
      *         content:

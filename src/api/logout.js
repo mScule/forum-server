@@ -17,6 +17,8 @@ module.exports = {
      *             schema:
      *               type: string
      *               example: "Logout successful"
+     *       202:
+     *         description: The request was accepted be used in a database query.
      *       404:
      *         description: Error logging out
      *         content:

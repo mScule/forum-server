@@ -5,6 +5,51 @@ const users = require("./users");
 const mcache = require("memory-cache");
 
 module.exports = {
+    /**
+     * @swagger
+     * /publications:
+     *   post:
+     *     summary: Creates a publication
+     *     consumes:
+     *       - application/json
+     *     parameters:
+     *       - in: body
+     *         name: publication
+     *         description: The publication to be created
+     *         schema:
+     *           type: object
+     *           required:
+     *             - type
+     *             - title
+     *             - content
+     *             - reply_to_id
+     *           properties:
+     *             type:
+     *               type: string
+     *             title:
+     *               type: string
+     *             content:
+     *               type: string
+     *             reply_to_id:
+     *               type: integer
+     *     responses:
+     *       201:
+     *         description: A new publication was created.
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Publication post result: ..."
+     *       202:
+     *         description: The request was accepted be used in a database query.
+     *       401:
+     *         description: Error creating a publication
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Publication error: ..."
+     */
     /*
     * Gets the current user's id from the database with the "forum_api_key" cookie which identifies the user.
     * Adds a publication to the database which is associated with the current user's id.
@@ -28,6 +73,47 @@ module.exports = {
             res.send("Publication error: " + e);
         }
     },
+    /**
+     * @swagger
+     * /publications:
+     *   put:
+     *     summary: Modifies a publication's private value
+     *     consumes:
+     *       - application/json
+     *     parameters:
+     *       - in: body
+     *         name: publication
+     *         description: The publication to be modified
+     *         schema:
+     *           type: object
+     *           required:
+     *             - private
+     *             - publication_id
+     *           properties:
+     *             private:
+     *               type: integer
+     *             publication_id:
+     *               type: string
+     *     responses:
+     *       200:
+     *         description: A publication was modified.
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Publication put: ..."
+     *       202:
+     *         description: Request was accepted to a database query.
+     *       404:
+     *         description: Error logging out
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Error updating publication: Error: ..."
+     *       500:
+     *         description: An error occured in the database query.
+     */
     /*
     * Sets a publication's private value to be the value of a "private" property in an HTTP request's body.
     * Also requires a "publication_id" property in the HTTP request's body to specify which publication will be modified.
@@ -44,6 +130,49 @@ module.exports = {
             res.send("Error updating publication: " + e);
         }
     },
+    /**
+     * @swagger
+     * /publications:
+     *   delete:
+     *     summary: Deletes a publication
+     *     consumes:
+     *       - application/json
+     *     parameters:
+     *       - in: body
+     *         name: publication
+     *         description: The publication to be deleted
+     *         schema:
+     *           type: object
+     *           required:
+     *             - publication_id
+     *           properties:
+     *             publication_id:
+     *               type: integer
+     *     responses:
+     *       200:
+     *         description: A publication was deleted.
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Publication delete: ..."
+     *       202:
+     *         description: Request was accepted to a database query.
+     *       404:
+     *         description: No publication with the specified publication_id found
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Publication delete: ..."
+     *       500:
+     *         description: An error occured in the database query.
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Publication delete: Error: ..."
+     */
     /*
     * Deletes a publication which matches the given "publication_id" property's value.
     * */
@@ -53,6 +182,10 @@ module.exports = {
         const result = await db.query(statement, values, res, "/publications");
         res.send("Publication delete: " + result);
     },
+    // /**
+    //  * @swagger
+    //  *
+    //  */
     /*
     * Gets publications with specified column values. If you don't want to take certain or any of the column values
     * into account in the query, insert the value "any" to their respective properties in the HTTP request's body.
