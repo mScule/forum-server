@@ -116,7 +116,7 @@ module.exports = {
      *               type: string
      *               example: "Publication put: ..."
      *       202:
-     *         description: Request was accepted to a database query.
+     *         description: The request was accepted to be used in a database query.
      *       404:
      *         description: No publication found
      *         content:
@@ -170,7 +170,7 @@ module.exports = {
      *               type: string
      *               example: "Publication delete: ..."
      *       202:
-     *         description: Request was accepted to a database query.
+     *         description: The request was accepted to be used in a database query.
      *       404:
      *         description: No publication with the specified publication_id found
      *         content:
@@ -197,7 +197,7 @@ module.exports = {
     },
     /**
      * @swagger
-     * /publications get:
+     * /publications:
      *   get:
      *     summary: Gets publications
      *     consumes:
@@ -287,7 +287,7 @@ module.exports = {
      *                   reply_to_id:
      *                     type: integer
      *       202:
-     *         description: Request was accepted to a database query.
+     *         description: The request was accepted to be used in a database query.
      *       404:
      *         description: No data found
      *         content:

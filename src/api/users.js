@@ -4,6 +4,67 @@ const db = require("../utils/db");
 const mcache = require("memory-cache");
 
 module.exports = {
+    /**
+     * @swagger
+     * /users:
+     *   post:
+     *     summary: Creates a new user account
+     *     consumes:
+     *       - application/json
+     *     parameters:
+     *       - in: body
+     *         name: user
+     *         description: The user to be created
+     *         schema:
+     *           type: object
+     *           required:
+     *             - name
+     *             - email
+     *             - password
+     *             - disabled
+     *           properties:
+     *             name:
+     *               type: string
+     *             email:
+     *               type: string
+     *             password:
+     *               type: string
+     *             disabled:
+     *               type: integer
+     *     responses:
+     *       201:
+     *         description: A new user was created.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
+     *       202:
+     *         description: The request was accepted to be used in a database query.
+     *       500:
+     *         description: An error occurred in the database query.
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Error: ..."
+     */
     /*
     * Creates a new user. Requires the user's "name", "email", "password" and "disabled" status as properties in the
     * HTTP request's body.
@@ -14,7 +75,10 @@ module.exports = {
         const result = await db.query(statement, values, res, "/users");
         res.send(result);
     },
-
+    // /**
+    //  * @swagger
+    //  *
+    //  */
     /*
     * Updates a user's info. Requires the user's new email "email_new", new password "password_new", "disabled" status,
     * current email "email_current" and current password "password_current" as properties in the HTTP

@@ -18,7 +18,7 @@ module.exports = {
      *               type: string
      *               example: "Logout successful"
      *       202:
-     *         description: The request was accepted be used in a database query.
+     *         description: The request was accepted to be used in a database query.
      *       404:
      *         description: Error logging out
      *         content:
@@ -27,7 +27,6 @@ module.exports = {
      *               type: string
      *               example: "Error logging out! ..."
      */
-
     /*
     * Logs the user out by setting the user's identifier "forum_api_key" NULL in the database's "users" table and
     * clearing the cookie which identifies the user.

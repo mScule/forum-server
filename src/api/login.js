@@ -58,7 +58,7 @@ module.exports = {
      *                         items:
      *                           type: integer
      *       202:
-     *         description: The request was accepted be used in a database query.
+     *         description: The request was accepted to be used in a database query.
      *       401:
      *         description: Login failed
      *         content:
@@ -74,7 +74,6 @@ module.exports = {
      *               type: string
      *               example: "Login error. Error: ..."
      */
-
     /*
     * Logs the user in, creates a cookie to identify the user and adds if the given username and password
     * match a user stored in the database. Insert the username as "name" and password as "password" in the
