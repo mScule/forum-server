@@ -85,18 +85,13 @@ module.exports = {
     * request's body.
     * */
     put: async (req, res) => {
-        try {
-            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
-            const statement = `UPDATE forum_db.users SET name=?, email=?, password=?, disabled=? WHERE email=? 
+        const currentUserId = mcache.get(req.cookies["forum_api_key"]);
+        const statement = `UPDATE forum_db.users SET name=?, email=?, password=?, disabled=? WHERE email=? 
             AND password=? AND user_id=?`;
-            const values = [req.body.username_new, req.body.email_new, req.body.password_new, req.body.disabled,
-                req.body.email_current, req.body.password_current, currentUserId];
-            const result = await db.query(statement, values, res, "/users");
-            res.send("Users put: " + JSON.stringify(result));
-        } catch (e) {
-            res.status(401);
-            res.send("Error updating user info: " + e);
-        }
+        const values = [req.body.username_new, req.body.email_new, req.body.password_new, req.body.disabled,
+            req.body.email_current, req.body.password_current, currentUserId];
+        const result = await db.query(statement, values, res, "/users");
+        res.send("Users put: " + JSON.stringify(result));
     },
 
     /*
@@ -104,16 +99,11 @@ module.exports = {
     * request's body.
     * */
     delete: async (req, res) => {
-        try {
-            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
-            const statement = "DELETE FROM users WHERE email=? AND password=? AND user_id=?";
-            const values = [req.body.email, req.body.password, currentUserId];
-            const result = await db.query(statement, values, res, "/users");
-            res.send("Users delete: " + JSON.stringify(result));
-        } catch (e) {
-            res.status(401);
-            res.send("Error deleting user: " + e);
-        }
+        const currentUserId = mcache.get(req.cookies["forum_api_key"]);
+        const statement = "DELETE FROM users WHERE email=? AND password=? AND user_id=?";
+        const values = [req.body.email, req.body.password, currentUserId];
+        const result = await db.query(statement, values, res, "/users");
+        res.send("Users delete: " + JSON.stringify(result));
     },
 
     /*

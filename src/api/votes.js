@@ -9,51 +9,33 @@ module.exports = {
     * Adds a vote made by the logged-in user on a specific publication.
     * */
     post: async (req, res) => {
-        try {
-            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
-
-            const statement = "INSERT INTO forum_db.votes (publication_id, user_id, vote) VALUES (?, ?, ?)";
-            const values = [req.body.publication_id, currentUserId, req.body.vote];
-            const result = await db.query(statement, values, res, "/votes");
-            res.send(result);
-        } catch (e) {
-            res.status(401);
-            res.send("Error creating vote: " + e);
-        }
+        const currentUserId = mcache.get(req.cookies["forum_api_key"]);
+        const statement = "INSERT INTO forum_db.votes (publication_id, user_id, vote) VALUES (?, ?, ?)";
+        const values = [req.body.publication_id, currentUserId, req.body.vote];
+        const result = await db.query(statement, values, res, "/votes");
+        res.send(result);
     },
 
     /*
     * Modifies a vote on a specific publication which the current logged-in user has made.
     * */
     put: async (req, res) => {
-        try {
-            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
-
-            const statement = "UPDATE forum_db.votes SET vote=? WHERE publication_id=? AND user_id=?";
-            const values = [req.body.vote, req.body.publication_id, currentUserId];
-            const result = await db.query(statement, values, res, "/votes");
-            res.send("Votes put: " + JSON.stringify(result));
-        } catch (e) {
-            res.status(401);
-            res.send("Error updating vote: " + e);
-        }
+        const currentUserId = mcache.get(req.cookies["forum_api_key"]);
+        const statement = "UPDATE forum_db.votes SET vote=? WHERE publication_id=? AND user_id=?";
+        const values = [req.body.vote, req.body.publication_id, currentUserId];
+        const result = await db.query(statement, values, res, "/votes");
+        res.send("Votes put: " + JSON.stringify(result));
     },
 
     /*
     * Removes a vote on a specific publication which the current logged-in user has made.
     * */
     delete: async (req, res) => {
-        try {
-            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
-
-            const statement = "DELETE FROM votes WHERE publication_id=? AND user_id=?";
-            const values = [req.body.publication_id, currentUserId];
-            const result = await db.query(statement, values, res, "/votes");
-            res.send("Votes delete: " + result);
-        } catch (e) {
-            res.status(401);
-            res.send("Error deleting vote: " + e);
-        }
+        const currentUserId = mcache.get(req.cookies["forum_api_key"]);
+        const statement = "DELETE FROM votes WHERE publication_id=? AND user_id=?";
+        const values = [req.body.publication_id, currentUserId];
+        const result = await db.query(statement, values, res, "/votes");
+        res.send("Votes delete: " + result);
     },
 
     /*
