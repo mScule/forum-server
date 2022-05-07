@@ -57,6 +57,9 @@ module.exports = {
                 // row updated
                 clearCache(urlRoot);
                 res.status(200);
+            } else if (resolve.length > 0) {
+                // found data
+                res.status(200);
             }
             return resolve;
         } catch (e) {

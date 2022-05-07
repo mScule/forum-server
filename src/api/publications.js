@@ -13,6 +13,12 @@ module.exports = {
      *     consumes:
      *       - application/json
      *     parameters:
+     *       - in: cookie
+     *         name: forum_api_key
+     *         description: A cookie to identify the currently logged-in user
+     *         schema:
+     *           type: string
+     *           example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
      *       - in: body
      *         name: publication
      *         description: The publication to be created
@@ -82,6 +88,12 @@ module.exports = {
      *     consumes:
      *       - application/json
      *     parameters:
+     *       - in: cookie
+     *         name: forum_api_key
+     *         description: A cookie to identify the currently logged-in user
+     *         schema:
+     *           type: string
+     *           example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
      *       - in: body
      *         name: publication
      *         description: The publication to be modified
@@ -183,10 +195,114 @@ module.exports = {
         const result = await db.query(statement, values, res, "/publications");
         res.send("Publication delete: " + result);
     },
-    // /**
-    //  * @swagger
-    //  *
-    //  */
+    /**
+     * @swagger
+     * /publications get:
+     *   get:
+     *     summary: Gets publications
+     *     consumes:
+     *       - application/json
+     *     parameters:
+     *       - in: query
+     *         name: publication_id
+     *         required: true
+     *         schema:
+     *             type: integer
+     *         description: The publication's ID
+     *       - in: query
+     *         name: user_id
+     *         required: true
+     *         schema:
+     *             type: integer
+     *         description: The user's ID who created the publication
+     *       - in: query
+     *         name: type
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: The type of publication, a "post" or a "comment"
+     *       - in: query
+     *         name: title
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: The publication's title
+     *       - in: query
+     *         name: content
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: The publication's content
+     *       - in: query
+     *         name: private
+     *         required: true
+     *         schema:
+     *           type: integer
+     *         description: Is the publication private or public
+     *       - in: query
+     *         name: date_max
+     *         schema:
+     *           type: string
+     *         description: The publication's maximum date of creation
+     *       - in: query
+     *         name: date_min
+     *         schema:
+     *           type: string
+     *         description: The publication's minimum date of creation
+     *       - in: query
+     *         name: reply_to_id
+     *         required: true
+     *         schema:
+     *           type: integer
+     *         description: If the publication is a reply, the ID of the publication this publication refers to.
+     *     responses:
+     *       200:
+     *         description: Publications found
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     *                 properties:
+     *                   publication_id:
+     *                     type: integer
+     *                   user_id:
+     *                     type: integer
+     *                   type:
+     *                     type: string
+     *                   title:
+     *                     type: string
+     *                   private:
+     *                     type: object
+     *                     properties:
+     *                       type:
+     *                         type: string
+     *                       data:
+     *                         type: array
+     *                         items:
+     *                           type: integer
+     *                   date:
+     *                     type: string
+     *                   reply_to_id:
+     *                     type: integer
+     *       202:
+     *         description: Request was accepted to a database query.
+     *       404:
+     *         description: No data found
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "No data found"
+     *       500:
+     *         description: An error occurred in the database query.
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Error: ..."
+     */
     /*
     * Gets publications with specified column values. If you don't want to take certain or any of the column values
     * into account in the query, insert the value "any" to their respective properties in the HTTP request's body.
