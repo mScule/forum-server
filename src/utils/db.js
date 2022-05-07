@@ -48,6 +48,7 @@ module.exports = {
             } else if (resolve.affectedRows === 0) {
                 console.log("No data modified");
                 resolve = "No data modified";
+                res.status(404);
             } else if (resolve.affectedRows > 0 && resolve.changedRows === 0) {
                 // row created
                 clearCache(urlRoot);

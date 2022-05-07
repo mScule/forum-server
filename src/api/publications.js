@@ -22,7 +22,6 @@ module.exports = {
      *             - type
      *             - title
      *             - content
-     *             - reply_to_id
      *           properties:
      *             type:
      *               type: string
@@ -48,7 +47,14 @@ module.exports = {
      *           text/plain:
      *             schema:
      *               type: string
-     *               example: "Publication error: ..."
+     *               example: "Publication post result: ..."
+     *       500:
+     *         description: An error occurred in the database query.
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Publication post result: Error: ..."
      */
     /*
     * Gets the current user's id from the database with the "forum_api_key" cookie which identifies the user.
@@ -58,20 +64,15 @@ module.exports = {
     * replies to as "reply_to_id" in the HTTP request's body in JSON format.
     * */
     post: async (req, res) => {
-        try {
-            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
-            console.log("currentUserId: " + currentUserId);
+        const currentUserId = mcache.get(req.cookies["forum_api_key"]);
+        console.log("currentUserId: " + currentUserId);
 
-            const statement = `INSERT INTO forum_db.publications (user_id, type, title, content, private, reply_to_id) 
+        const statement = `INSERT INTO forum_db.publications (user_id, type, title, content, private, reply_to_id) 
                 VALUES (?, ?, ?, ?, ?, ?)`;
-            const values = [currentUserId, req.body.type, req.body.title, req.body.content, 0, req.body.reply_to_id];
-            const result = await db.query(statement, values, res, "/publications");
+        const values = [currentUserId, req.body.type, req.body.title, req.body.content, 0, req.body.reply_to_id];
+        const result = await db.query(statement, values, res, "/publications");
 
-            res.send("Publication post result: " + result);
-        } catch (e) {
-            res.status(401);
-            res.send("Publication error: " + e);
-        }
+        res.send("Publication post result: " + result);
     },
     /**
      * @swagger
@@ -105,30 +106,30 @@ module.exports = {
      *       202:
      *         description: Request was accepted to a database query.
      *       404:
-     *         description: Error logging out
+     *         description: No publication found
      *         content:
      *           text/plain:
      *             schema:
      *               type: string
-     *               example: "Error updating publication: Error: ..."
+     *               example: "Publication put: ..."
      *       500:
-     *         description: An error occured in the database query.
+     *         description: An error occurred in the database query.
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Publication put: Error: ..."
      */
     /*
     * Sets a publication's private value to be the value of a "private" property in an HTTP request's body.
     * Also requires a "publication_id" property in the HTTP request's body to specify which publication will be modified.
     * */
     put: async (req, res) => {
-        try {
-            const currentUserId = mcache.get(req.cookies["forum_api_key"]);
-            const statement = "UPDATE forum_db.publications SET private=? WHERE publication_id=? AND user_id=?";
-            const values = [req.body.private, req.body.publication_id, currentUserId];
-            const result = await db.query(statement, values, res, "/publications");
-            res.send("Publication put: " + result);
-        } catch (e) {
-            res.status(401);
-            res.send("Error updating publication: " + e);
-        }
+        const currentUserId = mcache.get(req.cookies["forum_api_key"]);
+        const statement = "UPDATE forum_db.publications SET private=? WHERE publication_id=? AND user_id=?";
+        const values = [req.body.private, req.body.publication_id, currentUserId];
+        const result = await db.query(statement, values, res, "/publications");
+        res.send("Publication put: " + result);
     },
     /**
      * @swagger
@@ -166,7 +167,7 @@ module.exports = {
      *               type: string
      *               example: "Publication delete: ..."
      *       500:
-     *         description: An error occured in the database query.
+     *         description: An error occurred in the database query.
      *         content:
      *           text/plain:
      *             schema:
