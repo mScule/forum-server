@@ -3,7 +3,7 @@
 const
     mysql = require("mysql"),
     {config} = require("./config"),
-    {clearCache} = require("../api/cache");
+    {clearCache} = require("./cache");
 
 const connectionPool = mysql.createPool({
     host: config.mysql.host,
