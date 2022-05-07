@@ -4,6 +4,28 @@ const db = require("../utils/db");
 const mcache = require("memory-cache");
 
 module.exports = {
+    /**
+     * @swagger
+     * /logout:
+     *   put:
+     *     summary: Logs a user out
+     *     responses:
+     *       200:
+     *         description: The logged-in user was logged out and a login cookie was cleared.
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Logout successful"
+     *       404:
+     *         description: Error logging out
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Error logging out! ..."
+     */
+
     /*
     * Logs the user out by setting the user's identifier "forum_api_key" NULL in the database's "users" table and
     * clearing the cookie which identifies the user.

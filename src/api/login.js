@@ -7,69 +7,70 @@ const mcache = require("memory-cache");
 module.exports = {
     /**
      * @swagger
-     * components:
-     *   schemas:
-     *     Disabled:
-     *       type: object
-     *       properties:
-     *         type:
-     *           type: string
-     *         data:
-     *           type: integer
-     */
-
-    /**
-     * @swagger
      * /login:
-     *  put:
-     *    summary: Logs a user in
-     *    consumes:
-     *         - application/json
-     *    parameters:
-     *         - in: body
-     *           name: user
-     *           description: The user to log in.
-     *           schema:
-     *             type: object
-     *             required:
-     *               - name
-     *               - password
-     *             properties:
-     *               name:
-     *                 type: string
-     *               password:
-     *                 type: string
-     *    responses:
-     *      201:
-     *        description: A login cookie was created
-     *        content:
-     *             application/json:
-     *               schema:
+     *   put:
+     *     summary: Logs a user in
+     *     consumes:
+     *       - application/json
+     *     parameters:
+     *       - in: body
+     *         name: user
+     *         description: The user to log in.
+     *         schema:
+     *           type: object
+     *           required:
+     *             - name
+     *             - password
+     *           properties:
+     *             name:
+     *               type: string
+     *             password:
+     *               type: string
+     *     responses:
+     *       201:
+     *         description: A user was logged in.
+     *          A login cookie was created and linked to the logged-in user in the database.
+     *          Responds with data of the logged-in user.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
      *                 type: object
      *                 properties:
-     *                  user_id:
-     *                      type: integer
-     *                  name:
-     *                      type: string
-     *                  email:
-     *                      type: string
-     *                  image:
-     *                      type: string
-     *                      format: binary
-     *                      nullable: true
-     *                  disabled:
-     *                      type: object
-     *                      properties:
-     *                          type:
-     *                              type: string
-     *                          data:
-     *                              type: array
-     *                              items:
-     *                                  type: integer
-     *      401:
-     *        description: Login failed
-     *      500:
-     *        description: Some error happened
+     *                   user_id:
+     *                     type: integer
+     *                   name:
+     *                     type: string
+     *                   email:
+     *                     type: string
+     *                   image:
+     *                     type: string
+     *                     format: binary
+     *                     nullable: true
+     *                   disabled:
+     *                     type: object
+     *                     properties:
+     *                       type:
+     *                         type: string
+     *                       data:
+     *                         type: array
+     *                         items:
+     *                           type: integer
+     *       401:
+     *         description: Login failed
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Login failed. Check your username and password."
+     *       500:
+     *         description: Some error happened
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Login error. Error: ..."
      */
 
     /*
