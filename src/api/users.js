@@ -75,10 +75,86 @@ module.exports = {
         const result = await db.query(statement, values, res, "/users");
         res.send(result);
     },
-    // /**
-    //  * @swagger
-    //  *
-    //  */
+    /**
+     * @swagger
+     * /users:
+     *   put:
+     *     summary: Modifies a user's info
+     *     consumes:
+     *       - application/json
+     *     parameters:
+     *       - in: cookie
+     *         name: forum_api_key
+     *         description: A cookie to identify the currently logged-in user
+     *         schema:
+     *           type: string
+     *           example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+     *       - in: body
+     *         name: user
+     *         description: The user to be modified
+     *         schema:
+     *           type: object
+     *           required:
+     *             - username_new
+     *             - email_new
+     *             - password_new
+     *             - disabled
+     *             - email_current
+     *             - password_current
+     *           properties:
+     *             username_new:
+     *               type: string
+     *             email_new:
+     *               type: string
+     *             password_new:
+     *               type: string
+     *             disabled:
+     *               type: integer
+     *             email_current:
+     *               type: string
+     *             password_current:
+     *               type: string
+     *     responses:
+     *       200:
+     *         description: A user was modified.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
+     *       202:
+     *         description: The request was accepted to be used in a database query.
+     *       404:
+     *         description: No user found
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "No data modified"
+     *       500:
+     *         description: An error occurred in the database query.
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Error: ..."
+     */
     /*
     * Updates a user's info. Requires the user's new email "email_new", new password "password_new", "disabled" status,
     * current email "email_current" and current password "password_current" as properties in the HTTP
@@ -91,9 +167,76 @@ module.exports = {
         const values = [req.body.username_new, req.body.email_new, req.body.password_new, req.body.disabled,
             req.body.email_current, req.body.password_current, currentUserId];
         const result = await db.query(statement, values, res, "/users");
-        res.send("Users put: " + JSON.stringify(result));
+        res.send(result);
     },
-
+    /**
+     * @swagger
+     * /users:
+     *   delete:
+     *     summary: Deletes a user
+     *     consumes:
+     *       - application/json
+     *     parameters:
+     *       - in: cookie
+     *         name: forum_api_key
+     *         description: A cookie to identify the currently logged-in user
+     *         schema:
+     *           type: string
+     *           example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+     *       - in: body
+     *         name: user
+     *         description: The user to be deleted
+     *         schema:
+     *           type: object
+     *           required:
+     *             - email
+     *             - password
+     *           properties:
+     *             email:
+     *               type: string
+     *             password:
+     *               type: string
+     *     responses:
+     *       200:
+     *         description: A user was deleted.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
+     *       202:
+     *         description: The request was accepted to be used in a database query.
+     *       404:
+     *         description: No user found
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "No data modified"
+     *       500:
+     *         description: An error occurred in the database query.
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Error: ..."
+     */
     /*
     * Deletes a user. Requires the user's "email" and "password" as properties in the HTTP
     * request's body.
@@ -103,9 +246,89 @@ module.exports = {
         const statement = "DELETE FROM users WHERE email=? AND password=? AND user_id=?";
         const values = [req.body.email, req.body.password, currentUserId];
         const result = await db.query(statement, values, res, "/users");
-        res.send("Users delete: " + JSON.stringify(result));
+        res.send(result);
     },
-
+    /**
+     * @swagger
+     * /users:
+     *   get:
+     *     summary: Gets the current user's data or gets any other users' data if a "get_current_user" parameter
+     *       which value equals "false" is inserted as a parameter.
+     *       Insert "any" in any of the other query parameters to not take the values of those columns into account.
+     *     consumes:
+     *       - application/json
+     *     parameters:
+     *       - in: query
+     *         name: get_current_user
+     *         schema:
+     *             type: boolean
+     *         description: Set the value to "false" if you want to get other than the currently logged-in user's data.
+     *       - in: query
+     *         name: user_id
+     *         schema:
+     *             type: integer
+     *         description: A specific user's ID
+     *       - in: query
+     *         name: name
+     *         schema:
+     *           type: string
+     *         description: A specific user's name
+     *       - in: query
+     *         name: email
+     *         schema:
+     *           type: string
+     *         description: A specific user's email
+     *       - in: query
+     *         name: disabled
+     *         schema:
+     *           type: integer
+     *         description: Is the user account disabled from use or not.
+     *           The value "0" means the account is enabled and "1" means the account is disabled.
+     *     responses:
+     *       200:
+     *         description: User(s) found
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     *                 properties:
+     *                   user_id:
+     *                     type: integer
+     *                   name:
+     *                     type: string
+     *                   email:
+     *                     type: string
+     *                   image:
+     *                     type: string
+     *                     format: binary
+     *                   disabled:
+     *                     type: object
+     *                     properties:
+     *                       type:
+     *                         type: string
+     *                       data:
+     *                         type: array
+     *                         items:
+     *                           type: integer
+     *       202:
+     *         description: The request was accepted to be used in a database query.
+     *       404:
+     *         description: No data found
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "No data found"
+     *       500:
+     *         description: An error occurred in the database query.
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "Error: ..."
+     */
     /*
     * Gets the currently logged-in user's data or gets users with specified column values if the param "get_current_user"
     * equals "false" in the HTTP request. If you don't want to take certain or any of the column values into account

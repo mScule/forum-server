@@ -118,7 +118,7 @@ module.exports = {
      *       202:
      *         description: The request was accepted to be used in a database query.
      *       404:
-     *         description: No publication found
+     *         description: No publications found
      *         content:
      *           text/plain:
      *             schema:
@@ -199,7 +199,8 @@ module.exports = {
      * @swagger
      * /publications:
      *   get:
-     *     summary: Gets publications
+     *     summary: Gets publications.
+     *              Insert "any" in any of the query parameters to not take the values of those columns into account.
      *     consumes:
      *       - application/json
      *     parameters:
@@ -238,7 +239,8 @@ module.exports = {
      *         required: true
      *         schema:
      *           type: integer
-     *         description: Is the publication private or public
+     *         description: Is the publication private or public.
+     *           The value "0" means the publication is public and "1" means the publication is private.
      *       - in: query
      *         name: date_max
      *         schema:
@@ -257,7 +259,7 @@ module.exports = {
      *         description: If the publication is a reply, the ID of the publication this publication refers to.
      *     responses:
      *       200:
-     *         description: Publications found
+     *         description: Publication(s) found
      *         content:
      *           application/json:
      *             schema:
