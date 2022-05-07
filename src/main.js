@@ -5,7 +5,30 @@ const
     cors = require("cors"),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
-    {config} = require("./utils/config");
+    {config} = require("./utils/config"),
+    swaggerJsDoc = require("swagger-jsdoc"),
+    swaggerUI = require("swagger-ui-express");
+
+// "http://" + config.mysql.host + ":" + config.server.port
+
+const options = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "Forum API",
+            version: "1.0.0",
+            description: "API to create and manage users, publications, up and down votes on a forum.",
+        },
+        servers: [
+            {
+                url: "http://localhost:8081",
+            }
+        ],
+    },
+    apis: ["src/api/*.js"],
+};
+
+const specs = swaggerJsDoc(options);
 
 const
     {login} = require("./api/login"),
@@ -16,6 +39,9 @@ const
 
 (async () => {
     const app = express();
+
+    app.use(
+        "/api-docs", swaggerUI.serve, swaggerUI.setup(specs))
 
     app.use(cors({
             origin: "http://localhost:8080",
