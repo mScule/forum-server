@@ -22,17 +22,16 @@ CREATE TABLE IF NOT EXISTS `publications` (
   `publication_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
   `type` enum('post','comment') NOT NULL,
-  `title` char(255) NOT NULL,
+  `title` char(255) DEFAULT NULL,
   `content` text NOT NULL,
   `private` bit(1) NOT NULL,
   `date` date NOT NULL DEFAULT current_timestamp(),
   `reply_to_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`publication_id`),
-  UNIQUE KEY `title` (`title`),
   UNIQUE KEY `content` (`content`) USING HASH,
   KEY `fk_publications_users` (`user_id`),
   CONSTRAINT `fk_publications_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
@@ -50,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `password` (`password`),
   UNIQUE KEY `forum_api_key` (`forum_api_key`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
