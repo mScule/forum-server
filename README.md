@@ -72,33 +72,56 @@ Here is the documentation on it's own:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                type: object
-                properties:
-                  user_id:
-                    type: integer
-                  name:
-                    type: string
-                  email:
-                    type: string
-                  image:
-                    type: string
-                    format: binary
-                    nullable: true
-                  disabled:
-                    type: object
-                    properties:
-                      type:
-                        type: string
-                      data:
-                        type: array
-                        items:
-                          type: integer
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
+      202:
+        description: The request was accepted to be used in a database query.
       401:
         description: Login failed
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
       500:
-        description: Some error occured in a database query.
+        description: An error occurred in the database query.
+        content:
+          text/plain:
+            schema:
+              type: string
+              example: "Error: ..."
 
 /logout:
   put:
@@ -107,19 +130,58 @@ Here is the documentation on it's own:
       200:
         description: A user was logged out and a login cookie was cleared.
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "Logout successful"
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
       202:
         description: The request was accepted to be used in a database query.
       404:
         description: Error logging out
         content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
+      500:
+        description: An error occurred in the database query.
+        content:
           text/plain:
             schema:
               type: string
-              example: "Error logging out! ..."
+              example: "Error: ..."
 
 /publications:
   post:
@@ -155,28 +217,60 @@ Here is the documentation on it's own:
       201:
         description: A new publication was created.
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "Publication post result: ..."
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
       202:
         description: The request was accepted be used in a database query.
       401:
         description: Error creating a publication
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "Publication post result: ..."
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
       500:
         description: An error occurred in the database query.
         content:
           text/plain:
             schema:
               type: string
-              example: "Publication post result: Error: ..."
+              example: "Error: ..."
 
-/publications put:
+/publications:
   put:
     summary: Modifies a publication's private value
     consumes:
@@ -205,28 +299,60 @@ Here is the documentation on it's own:
       200:
         description: A publication was modified.
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "Publication put: ..."
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
       202:
         description: The request was accepted to be used in a database query.
       404:
         description: No publications found
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "Publication put: ..."
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
       500:
         description: An error occurred in the database query.
         content:
           text/plain:
             schema:
               type: string
-              example: "Publication put: Error: ..."
+              example: "Error: ..."
 
-/publications delete:
+/publications:
   delete:
     summary: Deletes a publication
     consumes:
@@ -246,28 +372,60 @@ Here is the documentation on it's own:
       200:
         description: A publication was deleted.
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "Publication delete: ..."
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
       202:
         description: The request was accepted to be used in a database query.
       404:
         description: No publication with the specified publication_id found
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "Publication delete: ..."
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
       500:
         description: An error occurred in the database query.
         content:
           text/plain:
             schema:
               type: string
-              example: "Publication delete: Error: ..."
+              example: "Error: ..."
 
-/publications get:
+/publications:
   get:
     summary: Gets publications
       Insert "any" in any of the query parameters to not take the values of those columns into account.
@@ -278,13 +436,13 @@ Here is the documentation on it's own:
         name: publication_id
         required: true
         schema:
-            type: integer
+          type: integer
         description: The publication's ID
       - in: query
         name: user_id
         required: true
         schema:
-            type: integer
+          type: integer
         description: The user's ID who created the publication
       - in: query
         name: type
@@ -363,10 +521,10 @@ Here is the documentation on it's own:
       404:
         description: No data found
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "No data found"
+              type: array
+              example: []
       500:
         description: An error occurred in the database query.
         content:
@@ -434,7 +592,7 @@ Here is the documentation on it's own:
               type: string
               example: "Error: ..."
 
-/users put:
+/users:
   put:
     summary: Modifies a user's info
     consumes:
@@ -500,10 +658,26 @@ Here is the documentation on it's own:
       404:
         description: No user found
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "No data modified"
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
       500:
         description: An error occurred in the database query.
         content:
@@ -512,7 +686,7 @@ Here is the documentation on it's own:
               type: string
               example: "Error: ..."
 
-/users delete:
+/users:
   delete:
     summary: Deletes a user
     consumes:
@@ -566,10 +740,26 @@ Here is the documentation on it's own:
       404:
         description: No user found
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "No data modified"
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
       500:
         description: An error occurred in the database query.
         content:
@@ -578,9 +768,10 @@ Here is the documentation on it's own:
               type: string
               example: "Error: ..."
 
-/users get:
+/users:
   get:
-    summary: Gets the current user's data or gets any other users' data if a "get_current_user" parameter 
+    summary:
+      Gets the current user's data or gets any other users' data if a "get_current_user" parameter
       which value equals "false" is inserted as a parameter.
       Insert "any" in any of the other query parameters to not take the values of those columns into account.
     consumes:
@@ -589,12 +780,12 @@ Here is the documentation on it's own:
       - in: query
         name: get_current_user
         schema:
-            type: boolean
+          type: boolean
         description: Set the value to "false" if you want to get other than the currently logged-in user's data.
       - in: query
         name: user_id
         schema:
-            type: integer
+          type: integer
         description: A specific user's ID
       - in: query
         name: name
@@ -610,7 +801,7 @@ Here is the documentation on it's own:
         name: disabled
         schema:
           type: integer
-        description: Is the user account disabled from use or not. 
+        description: Is the user account disabled from use or not.
           The value "0" means the account is enabled and "1" means the account is disabled.
     responses:
       200:
@@ -645,10 +836,10 @@ Here is the documentation on it's own:
       404:
         description: No data found
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "No data found"
+              type: array
+              example: []
       500:
         description: An error occurred in the database query.
         content:
@@ -716,7 +907,7 @@ Here is the documentation on it's own:
               type: string
               example: "Error: ..."
 
-/votes put:
+/votes:
   put:
     summary: Modifies a vote
     consumes:
@@ -770,10 +961,26 @@ Here is the documentation on it's own:
       404:
         description: No vote found
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "No data modified"
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
       500:
         description: An error occurred in the database query.
         content:
@@ -782,7 +989,7 @@ Here is the documentation on it's own:
               type: string
               example: "Error: ..."
 
-/votes delete:
+/votes:
   delete:
     summary: Deletes a vote
     consumes:
@@ -833,10 +1040,26 @@ Here is the documentation on it's own:
       404:
         description: No vote found
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "No data modified"
+              type: object
+              properties:
+                fieldCount:
+                  type: integer
+                affectedRows:
+                  type: integer
+                insertId:
+                  type: integer
+                serverStatus:
+                  type: integer
+                warningCount:
+                  type: integer
+                message:
+                  type: string
+                protocol41:
+                  type: boolean
+                changedRows:
+                  type: integer
       500:
         description: An error occurred in the database query.
         content:
@@ -845,7 +1068,7 @@ Here is the documentation on it's own:
               type: string
               example: "Error: ..."
 
-/votes get:
+/votes:
   get:
     summary: Gets votes.
       Insert "any" in any of the query parameters to not take the values of those columns into account.
@@ -855,12 +1078,12 @@ Here is the documentation on it's own:
       - in: query
         name: user_id
         schema:
-            type: integer
+          type: integer
         description: The user's ID who cast the vote(s).
       - in: query
         name: publication_id
         schema:
-            type: integer
+          type: integer
         description: The publication's ID which the vote(s) is/are associated with.
       - in: query
         name: vote
@@ -888,10 +1111,10 @@ Here is the documentation on it's own:
       404:
         description: No data found
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
-              example: "No data found"
+              type: array
+              example: []
       500:
         description: An error occurred in the database query.
         content:
@@ -899,4 +1122,5 @@ Here is the documentation on it's own:
             schema:
               type: string
               example: "Error: ..."
+
 ```
