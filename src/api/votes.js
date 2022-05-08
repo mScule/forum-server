@@ -132,10 +132,26 @@ module.exports = {
      *       404:
      *         description: No vote found
      *         content:
-     *           text/plain:
+     *           application/json:
      *             schema:
-     *               type: string
-     *               example: "No data modified"
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
      *       500:
      *         description: An error occurred in the database query.
      *         content:
@@ -207,10 +223,26 @@ module.exports = {
      *       404:
      *         description: No vote found
      *         content:
-     *           text/plain:
+     *           application/json:
      *             schema:
-     *               type: string
-     *               example: "No data modified"
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
      *       500:
      *         description: An error occurred in the database query.
      *         content:
@@ -274,10 +306,10 @@ module.exports = {
      *       404:
      *         description: No data found
      *         content:
-     *           text/plain:
+     *           application/json:
      *             schema:
-     *               type: string
-     *               example: "No data found"
+     *               type: array
+     *               example: []
      *       500:
      *         description: An error occurred in the database query.
      *         content:

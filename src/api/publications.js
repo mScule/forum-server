@@ -41,26 +41,58 @@ module.exports = {
      *       201:
      *         description: A new publication was created.
      *         content:
-     *           text/plain:
+     *           application/json:
      *             schema:
-     *               type: string
-     *               example: "Publication post result: ..."
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
      *       202:
      *         description: The request was accepted be used in a database query.
      *       401:
      *         description: Error creating a publication
      *         content:
-     *           text/plain:
+     *           application/json:
      *             schema:
-     *               type: string
-     *               example: "Publication post result: ..."
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
      *       500:
      *         description: An error occurred in the database query.
      *         content:
      *           text/plain:
      *             schema:
      *               type: string
-     *               example: "Publication post result: Error: ..."
+     *               example: "Error: ..."
      */
     /*
     * Gets the current user's id from the database with the "forum_api_key" cookie which identifies the user.
@@ -78,7 +110,7 @@ module.exports = {
         const values = [currentUserId, req.body.type, req.body.title, req.body.content, 0, req.body.reply_to_id];
         const result = await db.query(statement, values, res, "/publications");
 
-        res.send("Publication post result: " + result);
+        res.send(result);
     },
     /**
      * @swagger
@@ -111,26 +143,58 @@ module.exports = {
      *       200:
      *         description: A publication was modified.
      *         content:
-     *           text/plain:
+     *           application/json:
      *             schema:
-     *               type: string
-     *               example: "Publication put: ..."
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
      *       202:
      *         description: The request was accepted to be used in a database query.
      *       404:
      *         description: No publications found
      *         content:
-     *           text/plain:
+     *           application/json:
      *             schema:
-     *               type: string
-     *               example: "Publication put: ..."
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
      *       500:
      *         description: An error occurred in the database query.
      *         content:
      *           text/plain:
      *             schema:
      *               type: string
-     *               example: "Publication put: Error: ..."
+     *               example: "Error: ..."
      */
     /*
     * Sets a publication's private value to be the value of a "private" property in an HTTP request's body.
@@ -141,7 +205,7 @@ module.exports = {
         const statement = "UPDATE forum_db.publications SET private=? WHERE publication_id=? AND user_id=?";
         const values = [req.body.private, req.body.publication_id, currentUserId];
         const result = await db.query(statement, values, res, "/publications");
-        res.send("Publication put: " + result);
+        res.send(result);
     },
     /**
      * @swagger
@@ -165,26 +229,58 @@ module.exports = {
      *       200:
      *         description: A publication was deleted.
      *         content:
-     *           text/plain:
+     *           application/json:
      *             schema:
-     *               type: string
-     *               example: "Publication delete: ..."
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
      *       202:
      *         description: The request was accepted to be used in a database query.
      *       404:
      *         description: No publication with the specified publication_id found
      *         content:
-     *           text/plain:
+     *           application/json:
      *             schema:
-     *               type: string
-     *               example: "Publication delete: ..."
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
      *       500:
      *         description: An error occurred in the database query.
      *         content:
      *           text/plain:
      *             schema:
      *               type: string
-     *               example: "Publication delete: Error: ..."
+     *               example: "Error: ..."
      */
     /*
     * Deletes a publication which matches the given "publication_id" property's value.
@@ -193,14 +289,14 @@ module.exports = {
         const statement = "DELETE FROM publications WHERE publication_id=?";
         const values = [req.body.publication_id];
         const result = await db.query(statement, values, res, "/publications");
-        res.send("Publication delete: " + result);
+        res.send(result);
     },
     /**
      * @swagger
      * /publications:
      *   get:
-     *     summary: Gets publications.
-     *              Insert "any" in any of the query parameters to not take the values of those columns into account.
+     *     summary: Gets publications
+     *       Insert "any" in any of the query parameters to not take the values of those columns into account.
      *     consumes:
      *       - application/json
      *     parameters:
@@ -293,10 +389,10 @@ module.exports = {
      *       404:
      *         description: No data found
      *         content:
-     *           text/plain:
+     *           application/json:
      *             schema:
-     *               type: string
-     *               example: "No data found"
+     *               type: array
+     *               example: []
      *       500:
      *         description: An error occurred in the database query.
      *         content:
