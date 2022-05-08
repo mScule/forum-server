@@ -21,7 +21,7 @@ const options = {
         },
         servers: [
             {
-                url: "http://localhost:8081",
+                url: "http://" + config.mysql.host + ":" + config.server.port,
             }
         ],
     },
