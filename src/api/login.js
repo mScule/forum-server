@@ -28,51 +28,60 @@ module.exports = {
      *               type: string
      *     responses:
      *       201:
-     *         description: A user was logged in.
-     *          A login cookie was created and linked to the logged-in user in the database.
-     *          Responds with data of the logged-in user.
+     *         description: A user was logged in. A login cookie was created and linked to the logged-in user in the database.
      *         content:
      *           application/json:
      *             schema:
-     *               type: array
-     *               items:
-     *                 type: object
-     *                 properties:
-     *                   user_id:
-     *                     type: integer
-     *                   name:
-     *                     type: string
-     *                   email:
-     *                     type: string
-     *                   image:
-     *                     type: string
-     *                     format: binary
-     *                     nullable: true
-     *                   disabled:
-     *                     type: object
-     *                     properties:
-     *                       type:
-     *                         type: string
-     *                       data:
-     *                         type: array
-     *                         items:
-     *                           type: integer
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
      *       202:
      *         description: The request was accepted to be used in a database query.
      *       401:
      *         description: Login failed
      *         content:
-     *           text/plain:
+     *           application/json:
      *             schema:
-     *               type: string
-     *               example: "Login failed. Check your username and password."
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
      *       500:
-     *         description: Some error happened
+     *         description: An error occurred in the database query.
      *         content:
      *           text/plain:
      *             schema:
      *               type: string
-     *               example: "Login error. Error: ..."
+     *               example: "Error: ..."
      */
     /*
     * Logs the user in, creates a cookie to identify the user and adds if the given username and password
@@ -85,24 +94,21 @@ module.exports = {
         const values = [uuidV4, req.body.name, req.body.password];
         const result = await db.query(statement, values, res, "/users");
 
-        if (result === undefined || result === "No data modified" || result === "No data found") {
+        if (result === undefined || result.length === 0 || result.affectedRows === 0) {
             res.status(401);
-            res.send("Login failed. Check your username and password.");
-        } else if (result instanceof Error) {
-            res.send("Login error. " + result);
         } else {
             const statement = `SELECT user_id, name, email, image, disabled FROM users WHERE forum_api_key=? AND name=? 
                 AND password=?`;
             const values = [uuidV4, req.body.name, req.body.password];
-            const result = await db.query(statement, values, res, "/users");
+            const resultUserInfo = await db.query(statement, values, res, "/users");
 
             // set a new cookie on login
             res.cookie('forum_api_key', uuidV4, {maxAge: 900000, httpOnly: true});
             console.log('cookie created successfully');
 
-            mcache.put(uuidV4, result[0].user_id, 900000);
+            mcache.put(uuidV4, resultUserInfo[0].user_id, 900000);
             res.status(201);
-            res.send(result);
         }
+        res.send(result);
     }
 }

@@ -11,21 +11,60 @@ module.exports = {
      *     summary: Logs a user out
      *     responses:
      *       200:
-     *         description: The logged-in user was logged out and a login cookie was cleared.
+     *         description: A user was logged out and a login cookie was cleared.
      *         content:
-     *           text/plain:
+     *           application/json:
      *             schema:
-     *               type: string
-     *               example: "Logout successful"
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
      *       202:
      *         description: The request was accepted to be used in a database query.
      *       404:
      *         description: Error logging out
      *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 fieldCount:
+     *                   type: integer
+     *                 affectedRows:
+     *                   type: integer
+     *                 insertId:
+     *                   type: integer
+     *                 serverStatus:
+     *                   type: integer
+     *                 warningCount:
+     *                   type: integer
+     *                 message:
+     *                   type: string
+     *                 protocol41:
+     *                   type: boolean
+     *                 changedRows:
+     *                   type: integer
+     *       500:
+     *         description: An error occurred in the database query.
+     *         content:
      *           text/plain:
      *             schema:
      *               type: string
-     *               example: "Error logging out! ..."
+     *               example: "Error: ..."
      */
     /*
     * Logs the user out by setting the user's identifier "forum_api_key" NULL in the database's "users" table and
@@ -37,16 +76,12 @@ module.exports = {
         const values = [req.cookies["forum_api_key"]];
         const result = await db.query(statement, values, res, "/users");
 
-        if (result === undefined || result === "No data modified" || result === "No data found"
-            || result instanceof Error) {
-            res.status(404);
-            res.send("Error logging out! " + result);
-        } else {
+        if (!(result === undefined || result.length === 0 || result.affectedRows === 0
+            || result instanceof Error)) {
             // Clear user api key cache and cookie
             mcache.del(req.cookies["forum_api_key"]);
             res.clearCookie("forum_api_key");
-            res.status(200);
-            res.send("Logout successful");
         }
+        res.send(result);
     }
 }
