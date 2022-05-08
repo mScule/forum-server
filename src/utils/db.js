@@ -34,20 +34,11 @@ module.exports = {
     * */
     query: async (statement, values, res, urlRoot) => {
         res.status(202);
-        console.log(JSON.stringify(values));
-        console.log(JSON.stringify(statement));
         try {
             let resolve = await executeQuery(statement, values);
-            // console.log("resolve: " + JSON.stringify(resolve));
-            console.log("resolve.length: " + resolve.length);
-            console.log("resolve.affectedRows: " + resolve.affectedRows);
             if (resolve.length === 0) {
-                console.log("No data found");
-                // resolve = "No data found";
                 res.status(404);
             } else if (resolve.affectedRows === 0) {
-                console.log("No data modified");
-                // resolve = "No data modified";
                 res.status(404);
             } else if (resolve.affectedRows > 0 && resolve.changedRows === 0) {
                 // row created
@@ -64,7 +55,6 @@ module.exports = {
             return resolve;
         } catch (e) {
             res.status(500);
-            console.error(e.toString());
             return e;
         }
     }

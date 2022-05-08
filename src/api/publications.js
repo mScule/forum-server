@@ -103,13 +103,10 @@ module.exports = {
     * */
     post: async (req, res) => {
         const currentUserId = mcache.get(req.cookies["forum_api_key"]);
-        console.log("currentUserId: " + currentUserId);
-
         const statement = `INSERT INTO forum_db.publications (user_id, type, title, content, private, reply_to_id) 
                 VALUES (?, ?, ?, ?, ?, ?)`;
         const values = [currentUserId, req.body.type, req.body.title, req.body.content, 0, req.body.reply_to_id];
         const result = await db.query(statement, values, res, "/publications");
-
         res.send(result);
     },
     /**
@@ -407,7 +404,6 @@ module.exports = {
     * */
     get: async (req, res) => {
         if (mcache.get(req.originalUrl)) { // Check if there's already cached data
-            console.log("sent cached data from " + req.originalUrl);
             res.send(mcache.get(req.originalUrl));
         } else {
             const values =

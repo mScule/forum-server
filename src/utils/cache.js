@@ -10,7 +10,6 @@ module.exports = {
     clearCache: (urlRoot) => {
         for (let i = 0; i < mcache.keys().length; i++) {
             if (mcache.keys()[i].startsWith(urlRoot)) {
-                console.log("mcache.keys()[i]: " + mcache.keys()[i])
                 mcache.del(mcache.keys()[i]);
                 i--;
             }

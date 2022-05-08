@@ -368,7 +368,6 @@ module.exports = {
     * */
     get: async (req, res) => {
         if (mcache.get(req.originalUrl)) { // Check if there's already cached data
-            console.log("sent cached data from " + req.originalUrl);
             res.send(mcache.get(req.originalUrl));
         } else {
             let statement = `SELECT user_id, name, email, image, disabled FROM users WHERE forum_api_key = ?`;

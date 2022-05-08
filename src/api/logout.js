@@ -72,10 +72,8 @@ module.exports = {
     * */
     logout: async (req, res) => {
         const statement = "UPDATE forum_db.users SET forum_api_key= NULL WHERE forum_api_key=?";
-        console.log("req.cookies['forum_api_key']: " + req.cookies["forum_api_key"]);
         const values = [req.cookies["forum_api_key"]];
         const result = await db.query(statement, values, res, "/users");
-
         if (!(result === undefined || result.length === 0 || result.affectedRows === 0
             || result instanceof Error)) {
             // Clear user api key cache and cookie

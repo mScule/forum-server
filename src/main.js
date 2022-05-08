@@ -9,8 +9,6 @@ const
     swaggerJsDoc = require("swagger-jsdoc"),
     swaggerUI = require("swagger-ui-express");
 
-// "http://" + config.mysql.host + ":" + config.server.port
-
 const options = {
     definition: {
         openapi: "3.0.0",
@@ -49,18 +47,7 @@ const
         }),
         bodyParser.urlencoded({extended: false}),
         bodyParser.json(),
-        cookieParser(),
-        function (req, res, next) {
-            // check if client sent cookie
-            let cookie = req.cookies["forum_api_key"];
-            if (cookie === undefined) {
-                console.log("Not logged in")
-            } else {
-                // yes, cookie was already present
-                console.log('Cookie already exists: ', cookie);
-            }
-            next();
-        });
+        cookieParser());
 
     // Login
     app.put("/login", (req, res) => login(req, res));

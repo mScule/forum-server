@@ -324,7 +324,6 @@ module.exports = {
     * */
     get: async (req, res) => {
         if (mcache.get(req.originalUrl)) { // Check if there's already cached data
-            console.log("sent cached data from " + req.originalUrl);
             res.send(mcache.get(req.originalUrl));
         } else {
             const statement = `SELECT * FROM votes WHERE user_id = IF (? = "any", user_id, ?)

@@ -104,7 +104,6 @@ module.exports = {
 
             // set a new cookie on login
             res.cookie('forum_api_key', uuidV4, {maxAge: 900000, httpOnly: true});
-            console.log('cookie created successfully');
 
             mcache.put(uuidV4, resultUserInfo[0].user_id, 900000);
             res.status(201);
